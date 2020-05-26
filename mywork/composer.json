@@ -1,0 +1,22 @@
+{
+    "name": "mywork/mywork-wp-mu",
+    "description": "MyWork's Must Use Plugin",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Jera Simpson",
+            "email": "jera@mywork.com.au"
+        }
+    ],
+    "require": {
+        
+    },
+    "autoload": {
+        "psr-4": {
+            "MyWorkWPMU\\includes\\": [
+                "includes/"
+            ]
+        }
+    }
+}
