@@ -78,6 +78,9 @@ class MyWorkWPMU {
         $this->version = MYWORK_WPMU_VERSION;
         $this->loader = new Loader();
         $this->loadControllers();
+        if ( class_exists( 'WP_CLI' ) ) {
+            \WP_CLI::add_command( 'mywork', '\MyWorkWPMU\includes\MyWorkCli' );
+        }
 	}
 
     /**
@@ -87,9 +90,7 @@ class MyWorkWPMU {
     {
         foreach ($this->controllers as $controller)
         {
-            if ( $controller instanceof BaseMyWorkClass ) {
-                new $controller( $this->mywork_wpmu, $this->version, $this->loader );
-            }
+            new $controller( $this->mywork_wpmu, $this->version, $this->loader );
         }
     }
 

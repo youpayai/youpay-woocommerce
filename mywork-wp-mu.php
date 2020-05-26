@@ -1,7 +1,13 @@
 <?php
 /**
- * MyWork Must Use Plugin
+ * Plugin Name: MyWork Tools
+ * Description: MyWork specific services and options
+ * Author: MyWork
+ * Author URI: https://mywork.com.au/
+ *
+ * @package wpengine/common-mu-plugin
  */
+
 
 $bootstrap = WPMU_PLUGIN_DIR . '/mywork/bootstrap.php';
 

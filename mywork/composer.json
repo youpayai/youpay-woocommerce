@@ -10,12 +10,16 @@
         }
     ],
     "require": {
-        
+        "symfony/var-dumper": "^5.0"
     },
     "autoload": {
+        "classmap": [
+            "admin",
+            "includes"
+        ],
         "psr-4": {
-            "MyWorkWPMU\\includes\\": [
-                "includes/"
+            "MyWorkWPMU\\": [
+                "/"
             ]
         }
     }
