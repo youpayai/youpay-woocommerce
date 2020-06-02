@@ -1,9 +1,9 @@
 <?php
 
-namespace MyWorkWPMU\includes;
+namespace WooYouPay\Controllers;
 
 
-class MyWorkCli extends \WP_CLI_Command
+class CliController extends \WP_CLI_Command
 {
     /**
      * Give Power User Status to User
