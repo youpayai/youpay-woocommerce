@@ -1,24 +1,24 @@
 <?php
 
-namespace WooYouPay\Controllers;
+namespace WooYouPay\controllers;
 
-use WooYouPay\bootstrap\Loader;
+use WooYouPay\bootstrap\loader;
 
 /**
  * Class ProcessPayment
  *
- * @package WooYouPay\Controllers
+ * @package WooYouPay\controllers
  */
 class ProcessPayment {
 
 	use LoaderTrait;
 
 	/**
-	 * Loader
+	 * loader
 	 *
-	 * @param Loader $loader main loader var.
+	 * @param loader $loader main loader var.
 	 */
-	public function loader( Loader $loader ) {
+	public function loader(loader $loader ) {
 		$loader->add_action( 'parse_request', $this, 'sniff_requests', 0 );
 		$loader->add_action( 'woocommerce_add_cart_item_data', $this, 'add_custom_field_item_data', 10, 4 );
 		$loader->add_action( 'woocommerce_before_calculate_totals', $this, 'before_calculate_totals', 20, 1 );

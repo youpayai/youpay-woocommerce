@@ -2,7 +2,7 @@
 
 namespace WooYouPay\bootstrap;
 
-class Loader {
+class loader {
 
 	/**
 	 * The array of actions registered with WordPress.

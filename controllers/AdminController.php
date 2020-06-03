@@ -1,14 +1,14 @@
 <?php
 
-namespace WooYouPay\Controllers;
+namespace WooYouPay\controllers;
 
-use WooYouPay\bootstrap\Loader;
+use WooYouPay\bootstrap\loader;
 
 class AdminController
 {
     use LoaderTrait;
 
-    public function loader(Loader $loader)
+    public function loader(loader $loader)
     {
 //        $loader->add_filter( 'woocommerce_payment_gateways', $this,'add_your_gateway_class', 10, 1 );
 

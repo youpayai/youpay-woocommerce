@@ -1,5 +1,5 @@
 <?php
-namespace WooYouPay\Controllers;
+namespace WooYouPay\controllers;
 
 /**
  * Cash on Delivery Gateway.
@@ -31,9 +31,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	/**
 	 * Load actions and filters
 	 *
-	 * @param \WooYouPay\bootstrap\Loader $loader
+	 * @param \WooYouPay\bootstrap\loader $loader
 	 */
-	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
+	public function loader( \WooYouPay\bootstrap\loader $loader ) {
 		$loader->add_action( 'woocommerce_thankyou_' . $this->id, $this, 'thankyou_page', 10, 1 );
 		$loader->add_filter( 'woocommerce_payment_complete_order_status', $this, 'change_payment_complete_order_status', 10, 3 );
 		$loader->add_action( 'woocommerce_email_before_order_table', $this, 'email_instructions', 10, 3 );

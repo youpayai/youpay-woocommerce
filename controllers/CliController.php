@@ -1,6 +1,6 @@
 <?php
 
-namespace WooYouPay\Controllers;
+namespace WooYouPay\controllers;
 
 
 class CliController extends \WP_CLI_Command

@@ -25,4 +25,4 @@ if ( ! defined('YOUPAY_PLUGIN_PATH') ) {
 
 require_once YOUPAY_PLUGIN_PATH . 'vendor/autoload.php';
 
-\WooYouPay\bootstrap\Startup::run();
+\WooYouPay\bootstrap\startup::run();

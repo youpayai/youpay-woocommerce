@@ -18,7 +18,7 @@
     },
     "autoload": {
         "classmap": [
-            "Controllers",
+          "controllers",
             "bootstrap"
         ],
         "psr-4": {

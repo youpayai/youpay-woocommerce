@@ -1,8 +1,8 @@
 <?php
 
-namespace WooYouPay\Controllers;
+namespace WooYouPay\controllers;
 
-use WooYouPay\bootstrap\Loader;
+use WooYouPay\bootstrap\loader;
 /**
  * The file that defines the core plugin class
  *
@@ -33,7 +33,7 @@ trait LoaderTrait {
      * @param      string    $plugin_slug       The name of this plugin.
      * @param      string    $version    The version of this plugin.
      */
-	public function init( string $plugin_slug, $version, $plugin_settings, Loader $loader ) {
+	public function init(string $plugin_slug, $version, $plugin_settings, loader $loader ) {
 		$this->plugin_settings = $plugin_settings;
 		$this->plugin_slug     = $plugin_slug;
 		$this->version         = $version;
@@ -43,8 +43,8 @@ trait LoaderTrait {
 	/**
 	 * Load the filters and actions for the class
 	 *
-	 * @param Loader $loader The Loader Object.
+	 * @param loader $loader The loader Object.
 	 * @return void
 	 */
-	abstract public function loader( Loader $loader );
+	abstract public function loader(loader $loader );
 }

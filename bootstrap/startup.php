@@ -2,15 +2,15 @@
 
 namespace WooYouPay\bootstrap;
 
-use WooYouPay\Controllers\AdminController;
-use WooYouPay\Controllers\ProcessPayment;
-use WooYouPay\Controllers\YouPayGateway;
-use WooYouPay\Controllers\LoaderTrait;
+use WooYouPay\controllers\AdminController;
+use WooYouPay\controllers\ProcessPayment;
+use WooYouPay\controllers\YouPayGateway;
+use WooYouPay\controllers\LoaderTrait;
 
-class Startup {
+class startup {
 
 	/**
-	 * Controllers to inject
+	 * controllers to inject
 	 * TODO : Auto dependency injection
 	 *
 	 * @var string[]
@@ -43,7 +43,7 @@ class Startup {
 	 * the plugin.
 	 *
 	 * @access   protected
-	 * @var	  Loader	$loader	Maintains and registers all hooks for the plugin.
+	 * @var	  loader	$loader	Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -73,16 +73,16 @@ class Startup {
 	public function __construct() {
 		$this->settings = get_option( 'woocommerce_youpay_settings', array() );
 		$this->version  = YOUPAY_VERSION;
-		$this->loader   = new Loader();
+		$this->loader   = new loader();
 		$this->sort_controllers();
 		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
-			\WP_CLI::add_command( $this->cli_command, '\WooYouPay\Controllers\CliController' );
+			\WP_CLI::add_command( $this->cli_command, '\WooYouPay\controllers\CliController' );
 		}
 
 	}
 
 	/**
-	 * Load the Controllers
+	 * Load the controllers
 	 */
 	public function sort_controllers() {
 		$delayed = $this->controllers['delay'] ?? false;
@@ -97,10 +97,10 @@ class Startup {
 	}
 
 	/**
-	 * Load Delayed Controllers
+	 * Load Delayed controllers
 	 */
 	public function load_delayed() {
-		$this->loader = new Loader();
+		$this->loader = new loader();
 		$this->load_controllers();
 		$this->loader->run();
 	}
