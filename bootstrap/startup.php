@@ -15,13 +15,13 @@ class startup {
 	 *
 	 * @var string[]
 	 */
-	protected $controllers = [
+	protected $controllers = array(
 		AdminController::class,
 		ProcessPayment::class,
-		'delay' => [
+		'delay' => array(
 			YouPayGateway::class
-		]
-	];
+		)
+	);
 
 	/**
 	 * The unique identifier of this plugin.
