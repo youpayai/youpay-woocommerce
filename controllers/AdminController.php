@@ -2,47 +2,80 @@
 
 namespace WooYouPay\controllers;
 
-use WooYouPay\bootstrap\loader;
+use WooYouPay\bootstrap\Loader;
 
-class AdminController
-{
-    use LoaderTrait;
+/**
+ * Class AdminController
+ *
+ * @package WooYouPay\controllers
+ */
+class AdminController {
+	use LoaderTrait;
 
-    public function loader(loader $loader)
-    {
-//        $loader->add_filter( 'woocommerce_payment_gateways', $this,'add_your_gateway_class', 10, 1 );
+	/**
+	 * Loader
+	 *
+	 * @param Loader $loader Loader.
+	 */
+	public function loader( Loader $loader ) {
+		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
+		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+		$loader->add_action( 'admin_menu', $this, 'add_login_page' );
 
-//        $loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
-//        $loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
-//        $loader->add_action( 'admin_menu', $this, 'add_admin_page' );
-    }
 
-    public function add_your_gateway_class() {
-       dd('sdfddf');
-    }
+		$loader->add_action( 'admin_post_process_youpay_login', $this, 'process_form_data' );
+
+		//$loader->add_filter( 'woocommerce_payment_gateways', $this,'add_your_gateway_class', 10, 1 );
+	}
+
+	public function add_your_gateway_class() {
+		dd('sdfddf');
+	}
 
 	public function enqueue_styles() {
-		wp_enqueue_style( $this->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/css/resources-style.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->youpay->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/css/resources-style.css', array(), $this->version, 'all' );
 	}
 
 	public function enqueue_scripts() {
-		wp_enqueue_script( $this->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/js/resources-script.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->youpay->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/js/resources-script.js', array( 'jquery' ), $this->version, false );
 	}
 
-    public function add_admin_page() {
-        add_menu_page(
-            'MyWork',
-            'MyWork',
-            'manage_options',
-            $this->plugin_slug,
-            array( $this, 'load_admin_page_content' ), // Calls function to require the partial
-            'https://s3.mywork.com.au/mw-icon-small.png',
-            80
-        );
-    }
+	/**
+	 * Add Admin Pages
+	 */
+	public function add_login_page() {
+		add_submenu_page(
+			null,
+			'YouPay Login',
+			'YouPay Login',
+			'manage_options',
+			$this->youpay->plugin_slug,
+			array( $this, 'load_login_page' )
+		);
+	}
 
-    // Load the plugin resources page partial.
-    public function load_admin_page_content() {
-        require_once YOUPAY_PLUGIN_PATH . 'resources/views/admin-view.php';
-    }
+	/**
+	 * Process YouPay Login via API
+	 */
+	public function process_form_data() {
+		$post = $_POST;
+		if ( empty( $post['nonce'] ) || empty( $post['email'] ) || empty( $post['password'] ) ) {
+			echo 'fail';
+			exit;
+		}
+
+		wp_verify_nonce( wp_unslash( $post['nonce'] ) );
+
+		$this->youpay->api->store_api_key(
+			wp_unslash( $post['email'] ),
+			wp_unslash( $post['password'] )
+		);
+	}
+
+	/**
+	 * Page Content
+	 */
+	public function load_login_page() {
+		require_once YOUPAY_PLUGIN_PATH . 'resources/views/login-view.php';
+	}
 }

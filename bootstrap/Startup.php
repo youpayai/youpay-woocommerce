@@ -7,10 +7,15 @@ use WooYouPay\controllers\ProcessPayment;
 use WooYouPay\controllers\YouPayGateway;
 use WooYouPay\controllers\LoaderTrait;
 
-class startup {
+/**
+ * Class startup
+ *
+ * @package WooYouPay\bootstrap
+ */
+class Startup {
 
 	/**
-	 * controllers to inject
+	 * Controllers to inject
 	 * TODO : Auto dependency injection
 	 *
 	 * @var string[]
@@ -19,8 +24,8 @@ class startup {
 		AdminController::class,
 		ProcessPayment::class,
 		'delay' => array(
-			YouPayGateway::class
-		)
+			YouPayGateway::class,
+		),
 	);
 
 	/**
@@ -29,7 +34,7 @@ class startup {
 	 * @access   protected
 	 * @var	  string	$plugin_slug The string used to uniquely identify this plugin.
 	 */
-	protected $plugin_slug = 'mywork-wpmu';
+	public $plugin_slug = 'mywork-wpmu';
 
 	/**
 	 * The CLI Command name
@@ -43,9 +48,9 @@ class startup {
 	 * the plugin.
 	 *
 	 * @access   protected
-	 * @var	  loader	$loader	Maintains and registers all hooks for the plugin.
+	 * @var	  Loader	$loader	Maintains and registers all hooks for the plugin.
 	 */
-	protected $loader;
+	public $loader;
 
 	/**
 	 * The current version of the plugin.
@@ -53,14 +58,21 @@ class startup {
 	 * @access   protected
 	 * @var	  string	$version	The current version of the plugin.
 	 */
-	protected $version;
+	public $version;
 
 	/**
 	 * The current plugin settings
 	 *
 	 * @var bool|mixed|void Settings.
 	 */
-	protected $settings;
+	public $settings;
+
+	/**
+	 * The current plugin settings
+	 *
+	 * @var bool|mixed|void Settings.
+	 */
+	public $api;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -68,17 +80,16 @@ class startup {
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
 	 * Load the dependencies, define the locale, and set the hooks for the resources area and
 	 * the public-facing side of the site.
-	 *
 	 */
 	public function __construct() {
 		$this->settings = get_option( 'woocommerce_youpay_settings', array() );
 		$this->version  = YOUPAY_VERSION;
-		$this->loader   = new loader();
+		$this->loader   = new Loader();
+		$this->api      = new Api();
 		$this->sort_controllers();
 		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
 			\WP_CLI::add_command( $this->cli_command, '\WooYouPay\controllers\CliController' );
 		}
-
 	}
 
 	/**
@@ -100,7 +111,7 @@ class startup {
 	 * Load Delayed controllers
 	 */
 	public function load_delayed() {
-		$this->loader = new loader();
+		$this->loader = new Loader();
 		$this->load_controllers();
 		$this->loader->run();
 	}
@@ -127,10 +138,25 @@ class startup {
 		return $controller;
 	}
 
-	protected function load_controllers()
-	{
-		foreach ($this->controllers as $key => $controller) {
-			$this->init_controller($controller);
+	/**
+	 * Load the Controllers
+	 */
+	protected function load_controllers() {
+		foreach ( $this->controllers as $key => $controller ) {
+			$this->init_controller( $controller );
 		}
+	}
+
+	/**
+	 * Run on Activation
+	 */
+	public static function activate() {
+	}
+
+	/**
+	 * Run on DeActivation
+	 */
+	public static function deactivate() {
+
 	}
 }

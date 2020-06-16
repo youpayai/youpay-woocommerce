@@ -9,8 +9,15 @@
             "email": "jera@mywork.com.au"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:MyWorkAus/youpay-php-sdk.git"
+        }
+    ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "MyWorkAus/youpay-php-sdk": "dev-master"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.0",
