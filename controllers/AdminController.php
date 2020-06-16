@@ -21,15 +21,7 @@ class AdminController {
 		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
 		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 		$loader->add_action( 'admin_menu', $this, 'add_login_page' );
-
-
 		$loader->add_action( 'admin_post_process_youpay_login', $this, 'process_form_data' );
-
-		//$loader->add_filter( 'woocommerce_payment_gateways', $this,'add_your_gateway_class', 10, 1 );
-	}
-
-	public function add_your_gateway_class() {
-		dd('sdfddf');
 	}
 
 	public function enqueue_styles() {
@@ -49,7 +41,7 @@ class AdminController {
 			'YouPay Login',
 			'YouPay Login',
 			'manage_options',
-			$this->youpay->plugin_slug,
+			$this->youpay->plugin_slug . '_login_page',
 			array( $this, 'load_login_page' )
 		);
 	}

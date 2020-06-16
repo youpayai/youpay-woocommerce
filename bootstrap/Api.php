@@ -24,10 +24,13 @@ class Api {
 		$keys   = Client::auth( $email, $password, $domain );
 
 		if ( 200 === $keys->status_code ) {
-			$settings = get_option( 'woocommerce_youpay_settings' );
+			$settings = get_option( 'woocommerce_youpay_settings', array() );
 			$settings = array_merge( $settings, array( 'keys' => $keys ) );
 
 			update_option( 'woocommerce_youpay_settings', $settings );
+		} else {
+			echo 'FAILED';
+			exit;
 		}
 	}
 

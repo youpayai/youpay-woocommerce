@@ -35,6 +35,7 @@ class Startup {
 	 * @var	  string	$plugin_slug The string used to uniquely identify this plugin.
 	 */
 	public $plugin_slug = 'mywork-wpmu';
+	public static $plugin_slug_static = 'mywork-wpmu';
 
 	/**
 	 * The CLI Command name
@@ -47,8 +48,7 @@ class Startup {
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
-	 * @access   protected
-	 * @var	  Loader	$loader	Maintains and registers all hooks for the plugin.
+	 * @var Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	public $loader;
 
@@ -134,7 +134,7 @@ class Startup {
 	 */
 	protected function init_controller( string $controller ) {
 		$controller = new $controller();
-		$controller->init( $this->plugin_slug, $this->version, $this->settings, $this->loader );
+		$controller->init( $this );
 		return $controller;
 	}
 
@@ -151,6 +151,11 @@ class Startup {
 	 * Run on Activation
 	 */
 	public static function activate() {
+		exit(
+			wp_redirect(
+				admin_url( 'admin.php?page=' . self::$plugin_slug_static . '_login_page' )
+			)
+		);
 	}
 
 	/**
