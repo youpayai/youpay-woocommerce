@@ -59,12 +59,10 @@ class AdminController {
 	 */
 	public function process_form_data() {
 		$post = $_POST;
-		if ( empty( $post['nonce'] ) || empty( $post['email'] ) || empty( $post['password'] ) ) {
+		if ( empty( $post['email'] ) || empty( $post['password'] ) ) {
 			echo 'fail';
 			exit;
 		}
-
-		wp_verify_nonce( wp_unslash( $post['nonce'] ) );
 
 		$this->youpay->api->store_api_key(
 			wp_unslash( $post['email'] ),
