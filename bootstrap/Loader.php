@@ -2,7 +2,12 @@
 
 namespace WooYouPay\bootstrap;
 
-class loader {
+/**
+ * Class loader
+ *
+ * @package WooYouPay\bootstrap
+ */
+class Loader {
 
 	/**
 	 * The array of actions registered with WordPress.
@@ -83,7 +88,7 @@ class loader {
 			'component'     => $component,
 			'callback'      => $callback,
 			'priority'      => $priority,
-			'accepted_args' => $accepted_args
+			'accepted_args' => $accepted_args,
 		);
 
 		return $hooks;
