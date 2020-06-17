@@ -18,7 +18,7 @@ class ProcessPayment {
 	 *
 	 * @param Loader $loader main loader var.
 	 */
-	public function loader(Loader $loader ) {
+	public function loader( Loader $loader ) {
 		$loader->add_action( 'parse_request', $this, 'sniff_requests', 0 );
 		$loader->add_action( 'woocommerce_add_cart_item_data', $this, 'add_custom_field_item_data', 10, 4 );
 		$loader->add_action( 'woocommerce_before_calculate_totals', $this, 'before_calculate_totals', 20, 1 );
@@ -29,12 +29,27 @@ class ProcessPayment {
 		$loader->add_action( 'woocommerce_checkout_create_order_line_item', $this, 'custom_checkout_create_order_line_item', 20, 4 );
 	}
 
+	/**
+	 * Custom Checkout Create Order Line Item
+	 *
+	 * @param mixed $item item.
+	 * @param mixed $cart_item_key cart_item_key.
+	 * @param mixed $cart_item cart_item.
+	 * @param mixed $order order.
+	 */
 	public function custom_checkout_create_order_line_item( $item, $cart_item_key, $cart_item, $order ) {
 		if ( ! empty( $cart_item['youpay'] ) ) {
 			$item->update_meta_data( 'youpay_id', $cart_item['youpay'] );
 		}
 	}
 
+	/**
+	 * Payment Completed
+	 *
+	 * @param mixed $order_id OrderID number.
+	 *
+	 * @throws \WC_Data_Exception \Exception Thrown.
+	 */
 	public function payment_complete( $order_id ) {
 		if ( ! $order_id ) {
 			return;
@@ -71,6 +86,16 @@ class ProcessPayment {
 
 	}
 
+	/**
+	 * Add Custom Field Item Data
+	 *
+	 * @param mixed $cart_item_data Cart Data.
+	 * @param mixed $product_id Product ID.
+	 * @param mixed $variation_id Variation ID number.
+	 * @param int   $quantity Quantity.
+	 *
+	 * @return mixed
+	 */
 	public function add_custom_field_item_data( $cart_item_data, $product_id, $variation_id, $quantity ) {
 		if ( $product_id === $this->get_youpay_product_id() ) {
 			$cart_item_data['total_price']  = $this->get_youpay_total( WC()->session->get( 'youpay_id' ) );
@@ -82,9 +107,9 @@ class ProcessPayment {
 
 
 	/**
-	 * Update the price in the cart
+	 * Set the Price and Product name in the cart
 	 *
-	 * @since 1.0.0
+	 * @param mixed $cart_obj The Cart as an object.
 	 */
 	public function before_calculate_totals( $cart_obj ) {
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
@@ -99,6 +124,8 @@ class ProcessPayment {
 
 	/**
 	 * Get YouPay Total Amount
+	 *
+	 * @param int|bool $order_id Order ID number.
 	 *
 	 * @return int The total value.
 	 */
@@ -119,7 +146,6 @@ class ProcessPayment {
 
 		return (float) $order->get_total();
 	}
-
 
 	/**
 	 * Look for the Requests that have been setup with rewrite rules,
@@ -200,7 +226,7 @@ class ProcessPayment {
 	/**
 	 * UnSet Fields
 	 *
-	 * @param $fields
+	 * @param mixed $fields Checkout Fields.
 	 * @return mixed
 	 */
 	public function custom_override_checkout_fields( $fields ) {
@@ -273,6 +299,12 @@ class ProcessPayment {
 		return false;
 	}
 
+	/**
+	 * Allow access via static method
+	 *
+	 * @see cart_is_youpay()
+	 * @return bool
+	 */
 	public static function static_cart_is_youpay() {
 		$self = new self();
 		return $self->cart_is_youpay();
