@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:MyWorkAus/youpay-php-sdk.git",
-                "reference": "c367534ef2721b034353bec1d703a08ca336ee37"
+                "reference": "1e1c6faf9ba570d08d3e8598cda2e2700c52d568"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/c367534ef2721b034353bec1d703a08ca336ee37",
-                "reference": "c367534ef2721b034353bec1d703a08ca336ee37",
+                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/1e1c6faf9ba570d08d3e8598cda2e2700c52d568",
+                "reference": "1e1c6faf9ba570d08d3e8598cda2e2700c52d568",
                 "shasum": ""
             },
             "require": {
@@ -42,20 +42,20 @@
                 "source": "https://github.com/MyWorkAus/youpay-php-sdk/tree/master",
                 "issues": "https://github.com/MyWorkAus/youpay-php-sdk/issues"
             },
-            "time": "2020-06-15T23:47:23+00:00"
+            "time": "2020-06-18T03:17:23+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.5.4",
+            "version": "6.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "a4a1b6930528a8f7ee03518e6442ec7a44155d9d"
+                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/a4a1b6930528a8f7ee03518e6442ec7a44155d9d",
-                "reference": "a4a1b6930528a8f7ee03518e6442ec7a44155d9d",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
+                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                 "guzzlehttp/promises": "^1.0",
                 "guzzlehttp/psr7": "^1.6.1",
                 "php": ">=5.5",
-                "symfony/polyfill-intl-idn": "1.17.0"
+                "symfony/polyfill-intl-idn": "^1.17.0"
             },
             "require-dev": {
                 "ext-curl": "*",
@@ -109,7 +109,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2020-05-25T19:35:05+00:00"
+            "time": "2020-06-16T21:01:06+00:00"
         },
         {
             "name": "guzzlehttp/promises",

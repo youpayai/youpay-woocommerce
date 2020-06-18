@@ -79,6 +79,8 @@ class ProcessPayment {
 
 					$order->add_meta_data( 'youpay_processed', 'true' );
 					$order->save();
+
+					// TODO: Send data back to youpay.ai
 				}
 			}
 		}
@@ -156,6 +158,8 @@ class ProcessPayment {
 	public function sniff_requests() {
 		global $wp;
 		if ( ! empty( $wp->query_vars['name'] ) && ! empty( $wp->query_vars['page'] ) && 'youpay' === $wp->query_vars['name'] ) {
+
+			// TODO: fetch order based off meta data - match URL rather than ID for safety.
 
 			$youpay_order_id = $wp->query_vars['page'];
 			$youpay_order    = \wc_get_order( $youpay_order_id );

@@ -18,11 +18,11 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	/**
 	 * Constructor for the gateway.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		// Setup general properties.
 		$this->show_all_billing_fields = $this->get_option( 'show_all_billing_fields' );
 		$this->setup_properties();
+
 		// Load the settings.
 		$this->init_form_fields();
 		$this->init_settings();
@@ -55,7 +55,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	/**
 	 * Add our class to the Gateways available
 	 *
-	 * @param $methods
+	 * @param array $methods Array of existing Gateways.
 	 * @return mixed
 	 */
 	public function add_your_gateway_class( $methods ) {
@@ -67,33 +67,35 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Setup general properties for the gateway.
 	 */
 	protected function setup_properties() {
-		$this->method_title = $this->title = __( 'YouPay', 'youpay' );
-		$this->description  = $this->method_description = __( 'Send the bill to someone else.', 'youpay' );
-		$this->id           = 'youpay';
-		$this->icon         = apply_filters( 'woocommerce_cod_icon', '' );
-		$this->has_fields   = false;
+		$this->method_title       = __( 'YouPay', 'youpay' );
+		$this->title              = __( 'YouPay', 'youpay' );
+		$this->description        = __( 'Send the bill to someone else.', 'youpay' );
+		$this->method_description = __( 'Send the bill to someone else.', 'youpay' );
+		$this->id                 = 'youpay';
+		$this->icon               = apply_filters( 'woocommerce_cod_icon', '' );
+		$this->has_fields         = false;
 	}
 
 	/**
 	 * Initialise Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = [
-			'enabled'			=> [
-				'title'	   => __( 'Enable/Disable', 'woocommerce' ),
-				'label'	   => __( 'Enable YouPay', 'youpay' ),
-				'type'		=> 'checkbox',
+		$this->form_fields = array(
+			'enabled' => array(
+				'title'       => __( 'Enable/Disable', 'woocommerce' ),
+				'label'       => __( 'Enable YouPay', 'youpay' ),
+				'type'        => 'checkbox',
 				'description' => '',
-				'default'	 => 'no',
-			],
-			'show_all_billing_fields'			=> [
-				'title'	   => __( 'Enable/Disable', 'woocommerce' ),
-				'label'	   => __( 'Show all billing fields', 'youpay' ),
-				'type'		=> 'checkbox',
+				'default'     => 'no',
+			),
+			'show_all_billing_fields' => array(
+				'title'       => __( 'Enable/Disable', 'woocommerce' ),
+				'label'       => __( 'Show all billing fields', 'youpay' ),
+				'type'        => 'checkbox',
 				'description' => '',
-				'default'	 => 'no',
-			],
-		];
+				'default'     => 'no',
+			),
+		);
 	}
 
 	/**
@@ -120,6 +122,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 
 	/**
 	 * Output for the order received page.
+	 *
+	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
 	   echo '<div class="card-title">';
@@ -136,9 +140,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Change payment complete order status to completed for COD orders.
 	 *
 	 * @since  3.1.0
-	 * @param  string		 $status Current order status.
-	 * @param  int			$order_id Order ID.
-	 * @param  WC_Order|false $order Order object.
+	 * @param  string          $status Current order status.
+	 * @param  int             $order_id Order ID.
+	 * @param  \WC_Order|false $order Order object.
 	 * @return string
 	 */
 	public function change_payment_complete_order_status( $status, $order_id = 0, $order = false ) {
@@ -151,9 +155,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	/**
 	 * Add content to the WC emails.
 	 *
-	 * @param WC_Order $order Order object.
-	 * @param bool	 $sent_to_admin  Sent to admin.
-	 * @param bool	 $plain_text Email format: plain text or HTML.
+	 * @param \WC_Order $order Order object.
+	 * @param bool      $sent_to_admin  Sent to admin.
+	 * @param bool      $plain_text Email format: plain text or HTML.
 	 */
 	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
 		if ( $sent_to_admin || $this->id !== $order->get_payment_method() ) {
