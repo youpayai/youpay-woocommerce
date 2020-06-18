@@ -21,6 +21,8 @@ if ( ! defined( 'YOUPAY_VERSION' ) ) {
 	define( 'YOUPAY_VERSION', '1.0.0' );
 }
 
+//require_once 'bootstrap-local.php';
+
 if ( ! defined( 'YOUPAY_PLUGIN_PATH' ) ) {
 	define( 'YOUPAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 }

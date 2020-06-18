@@ -1,6 +1,8 @@
 <?php
 namespace WooYouPay\controllers;
 
+use YouPaySDK\OrderItem;
+
 /**
  * Cash on Delivery Gateway.
  *
@@ -113,6 +115,43 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		// Remove cart.
 		WC()->cart->empty_cart();
 
+		// TODO: Create Order in YouPay and save data locally.
+		$order_items = array();
+		foreach ( $order->get_items() as $item ) {
+			$product   = wc_get_product( $item->get_product_id() );
+			$image_id  = $product->get_image_id();
+			$image_url = wp_get_attachment_image_url( $image_id );
+
+			$order_items[] = OrderItem::create(
+				array(
+					'src'           => $image_url,
+					'product_id'    => $item->get_product_id(),
+					'order_item_id' => $item->get_id(),
+					'title'         => $item->get_name(),
+					'quantity'      => $item->get_quantity(),
+					'price'         => $item->get_subtotal(),
+					'total'         => $item->get_total(),
+				)
+			);
+		}
+
+		$response = $this->youpay->api->createOrderFromArray(
+			array(
+				'order_id'    => $order_id,
+				'title'       => 'Order #' . $order_id,
+				'order_items' => $order_items,
+				'extra_fees'  => $order->get_total() - $order->get_subtotal(),
+				'sub_total'   => $order->get_subtotal(),
+				'total'       => $order->get_total(),
+			)
+		);
+
+		// TODO: Handle Errors from requests.
+
+		$order->add_meta_data( 'youpay_order_id', $response['id'] );
+		$order->add_meta_data( 'youpay_url', $response['url'] );
+		$order->save();
+
 		// Return thankyou redirect.
 		return array(
 			'result'   => 'success',
@@ -126,14 +165,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
-	   echo '<div class="card-title">';
-	   echo '<h2>YouPay Payment Link</h2>';
-	   echo '</div>';
-
-	   echo '<div class="card-title">';
-	   $link = get_site_url() . '/youpay/' . $order_id;
-	   echo "<a href='$link'>$link</a>";
-	   echo '</div>';
+		$order = wc_get_order( $order_id );
+		$link  = 'https://youpay.link/' . $order->get_meta( 'youpay_url' );
+		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
 
 	/**

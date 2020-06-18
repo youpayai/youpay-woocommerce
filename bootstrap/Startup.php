@@ -6,6 +6,7 @@ use WooYouPay\controllers\AdminController;
 use WooYouPay\controllers\ProcessPayment;
 use WooYouPay\controllers\YouPayGateway;
 use WooYouPay\controllers\LoaderTrait;
+use YouPaySDK\Client;
 
 /**
  * Class startup
@@ -85,8 +86,17 @@ class Startup {
 		$this->settings = get_option( 'woocommerce_youpay_settings', array() );
 		$this->version  = YOUPAY_VERSION;
 		$this->loader   = new Loader();
-		$this->api      = new Api();
+		$this->api      = new Client();
+
+		// Setup Client Keys.
+		if ( ! empty( $this->settings['keys'] ) ) {
+			$keys = $this->settings['keys'];
+			$this->api->setToken( $keys['token'] );
+			$this->api->setStoreID( $keys['store_id'] );
+		}
+
 		$this->sort_controllers();
+
 		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
 			\WP_CLI::add_command( $this->cli_command, '\WooYouPay\controllers\CliController' );
 		}
