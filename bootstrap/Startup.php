@@ -29,21 +29,15 @@ class Startup {
 		),
 	);
 
-	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @access   protected
-	 * @var	  string	$plugin_slug The string used to uniquely identify this plugin.
-	 */
-	public $plugin_slug = 'mywork-wpmu';
-	public static $plugin_slug_static = 'mywork-wpmu';
+	public static $plugin_slug_static = 'youpay';
+	public $plugin_slug;
 
 	/**
 	 * The CLI Command name
 	 *
 	 * @var string
 	 */
-	protected $cli_command = 'mywork';
+	protected $cli_command = 'youpay';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -83,23 +77,25 @@ class Startup {
 	 * the public-facing side of the site.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'woocommerce_youpay_settings', array() );
-		$this->version  = YOUPAY_VERSION;
-		$this->loader   = new Loader();
-		$this->api      = new Client();
+		$this->plugin_slug = self::$plugin_slug_static;
+		$this->settings    = get_option( $this->plugin_slug . '_settings', array() );
+		$this->version     = YOUPAY_VERSION;
+		$this->loader      = new Loader();
+		$this->api         = new Client();
 
 		// Setup Client Keys.
 		if ( ! empty( $this->settings['keys'] ) ) {
 			$keys = $this->settings['keys'];
-			$this->api->setToken( $keys['token'] );
-			$this->api->setStoreID( $keys['store_id'] );
+			$this->api->setToken( $keys->access_token );
+			$this->api->setStoreID( $keys->store_id );
 		}
+	}
 
-		$this->sort_controllers();
-
-		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
-			\WP_CLI::add_command( $this->cli_command, '\WooYouPay\controllers\CliController' );
-		}
+	/**
+	 * Loader for The Startup File
+	 */
+	public function loader() {
+		$this->loader->add_action( 'admin_init', $this, 'plugin_redirect' );
 	}
 
 	/**
@@ -133,6 +129,11 @@ class Startup {
 	 */
 	public static function run() {
 		$self = new self();
+		$self->sort_controllers();
+		$self->loader();
+		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
+			\WP_CLI::add_command( $self->cli_command, '\WooYouPay\controllers\CliController' );
+		}
 		$self->loader->run();
 	}
 
@@ -157,14 +158,21 @@ class Startup {
 		}
 	}
 
+	public function plugin_redirect() {
+		if ( ! empty( $this->settings['redirect'] ) && ! isset( $_GET['mylogin'] ) ) {
+			wp_redirect(
+				admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' )
+			);
+		}
+	}
+
 	/**
 	 * Run on Activation
 	 */
 	public static function activate() {
-		exit(
-			wp_redirect(
-				admin_url( 'admin.php?page=' . self::$plugin_slug_static . '_login_page' )
-			)
+		update_option(
+			self::$plugin_slug_static . '_settings',
+			array( 'redirect' => true )
 		);
 	}
 
@@ -172,6 +180,16 @@ class Startup {
 	 * Run on DeActivation
 	 */
 	public static function deactivate() {
+		delete_option(self::$plugin_slug_static . '_settings');
+	}
 
+	/**
+	 * Update Plugin Settings.
+	 *
+	 * @param array $settings Settings to change.
+	 */
+	public function update_settings( array $settings ) {
+		$this->settings = array_merge( $this->settings, $settings );
+		update_option( $this->plugin_slug . '_settings', $this->settings );
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 namespace WooYouPay\controllers;
 
+use WooYouPay\bootstrap\Startup;
 use YouPaySDK\OrderItem;
 
 /**
@@ -109,11 +110,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		// Mark as processing or on-hold (payment won't be taken until delivery).
-		$order->update_status( 'on-hold', __( 'Awaiting YouPay Payment.', 'youpay' ) );
-
-		// Remove cart.
-		WC()->cart->empty_cart();
+		if (empty($this->youpay)) {
+			$this->youpay = new Startup();
+		}
 
 		// TODO: Create Order in YouPay and save data locally.
 		$order_items = array();
@@ -135,12 +134,16 @@ class YouPayGateway extends \WC_Payment_Gateway {
 			);
 		}
 
+		$total = (float) $order->get_total();
+		$subtotal = (float) $order->get_subtotal();
+		$extra_fees = $total - $subtotal;
+
 		$response = $this->youpay->api->createOrderFromArray(
 			array(
 				'order_id'    => $order_id,
 				'title'       => 'Order #' . $order_id,
 				'order_items' => $order_items,
-				'extra_fees'  => $order->get_total() - $order->get_subtotal(),
+				'extra_fees'  => $extra_fees,
 				'sub_total'   => $order->get_subtotal(),
 				'total'       => $order->get_total(),
 			)
@@ -148,9 +151,16 @@ class YouPayGateway extends \WC_Payment_Gateway {
 
 		// TODO: Handle Errors from requests.
 
-		$order->add_meta_data( 'youpay_order_id', $response['id'] );
-		$order->add_meta_data( 'youpay_url', $response['url'] );
+		$order->add_meta_data( 'youpay_order_id', $response->id );
+		$order->add_meta_data( 'youpay_url', $response->url );
 		$order->save();
+
+		// Mark as processing or on-hold (payment won't be taken until delivery).
+		$order->update_status( 'on-hold', __( 'Awaiting YouPay Payment.', 'youpay' ) );
+
+		// Remove cart.
+		WC()->cart->empty_cart();
+
 
 		// Return thankyou redirect.
 		return array(

@@ -3,6 +3,7 @@
 namespace WooYouPay\controllers;
 
 use WooYouPay\bootstrap\Loader;
+use YouPaySDK\Client;
 
 /**
  * Class AdminController
@@ -36,8 +37,17 @@ class AdminController {
 	 * Add Admin Pages
 	 */
 	public function add_login_page() {
+
+/*		add_submenu_page(
+			'wpengine-common',
+			'General Settings',
+			'General Settings',
+			$capability,
+			'wpengine-common',
+			array( $this, 'wpe_admin_page' )
+		);*/
 		add_submenu_page(
-			null,
+			null,//'wpengine-common',
 			'YouPay Login',
 			'YouPay Login',
 			'manage_options',
@@ -56,10 +66,18 @@ class AdminController {
 			exit;
 		}
 
-		$this->youpay->api->store_api_key(
-			wp_unslash( $post['email'] ),
-			wp_unslash( $post['password'] )
+		$domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
+
+		$keys   = Client::auth( $post['email'], $post['password'], $domain );
+
+		$this->youpay->update_settings(
+			array(
+				'redirect' => false,
+				'keys' => $keys,
+			)
 		);
+
+		wp_redirect('/wp-admin/');
 	}
 
 	/**
