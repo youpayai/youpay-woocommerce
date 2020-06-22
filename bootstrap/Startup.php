@@ -170,6 +170,16 @@ class Startup {
 	 * Run on Activation
 	 */
 	public static function activate() {
+
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+			echo '<h3>Please install WooCommerce before Activating</h3>';
+
+			// Adding @ before will prevent XDebug output.
+			@trigger_error( 'Please install Woocommerce before activating.', E_USER_ERROR );
+		}
+
 		update_option(
 			self::$plugin_slug_static . '_settings',
 			array( 'redirect' => true )

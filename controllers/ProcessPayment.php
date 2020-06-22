@@ -157,11 +157,11 @@ class ProcessPayment {
 	 */
 	public function sniff_requests() {
 		global $wp;
-		if ( ! empty( $wp->query_vars['name'] ) && ! empty( $wp->query_vars['page'] ) && 'youpay' === $wp->query_vars['name'] ) {
+		if ( ! empty( $_GET['youpay_id'] ) ) {
 
 			// TODO: fetch order based off meta data - match URL rather than ID for safety.
 
-			$youpay_order_id = $wp->query_vars['page'];
+			$youpay_order_id = $_GET['youpay_id'];
 			$youpay_order    = \wc_get_order( $youpay_order_id );
 
 			if ( ! $youpay_order || ! $youpay_order->has_status( 'on-hold' ) ) {
@@ -173,6 +173,7 @@ class ProcessPayment {
 
 			$this->set_you_id( $youpay_order_id );
 			$this->create_order();
+			exit; ///11.45 17th.....
 			return;
 		}
 	}
@@ -193,8 +194,7 @@ class ProcessPayment {
 	 */
 	public function create_order() {
 		WC()->cart->add_to_cart( $this->get_youpay_product_id() );
-		wp_safe_redirect( wc_get_checkout_url() );
-		exit;
+		wp_redirect( wc_get_checkout_url() );
 	}
 
 	/**
@@ -203,7 +203,7 @@ class ProcessPayment {
 	 * @return int Get YouPay ID.
 	 */
 	public function get_youpay_product_id(): int {
-		return 16738;
+		return 16738; // TODO: do this better
 	}
 
 	/**

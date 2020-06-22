@@ -138,16 +138,20 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$subtotal = (float) $order->get_subtotal();
 		$extra_fees = $total - $subtotal;
 
-		$response = $this->youpay->api->createOrderFromArray(
-			array(
-				'order_id'    => $order_id,
-				'title'       => 'Order #' . $order_id,
-				'order_items' => $order_items,
-				'extra_fees'  => $extra_fees,
-				'sub_total'   => $order->get_subtotal(),
-				'total'       => $order->get_total(),
-			)
-		);
+		try {
+			$response = $this->youpay->api->createOrderFromArray(
+				array(
+					'order_id'    => $order_id,
+					'title'       => 'Order #' . $order_id,
+					'order_items' => $order_items,
+					'extra_fees'  => $extra_fees,
+					'sub_total'   => $order->get_subtotal(),
+					'total'       => $order->get_total(),
+				)
+			);
+		} catch (\Exception $exception) {
+			dd($exception->getMessage());
+		}
 
 		// TODO: Handle Errors from requests.
 

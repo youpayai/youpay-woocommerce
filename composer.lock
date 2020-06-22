@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:MyWorkAus/youpay-php-sdk.git",
-                "reference": "898bf884ac5a5b3a54005d1b2440c0c39c477737"
+                "reference": "ee598abdb8239ff302e9e0ade7384b7d5b45582b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/898bf884ac5a5b3a54005d1b2440c0c39c477737",
-                "reference": "898bf884ac5a5b3a54005d1b2440c0c39c477737",
+                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/ee598abdb8239ff302e9e0ade7384b7d5b45582b",
+                "reference": "ee598abdb8239ff302e9e0ade7384b7d5b45582b",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
                 "source": "https://github.com/MyWorkAus/youpay-php-sdk/tree/master",
                 "issues": "https://github.com/MyWorkAus/youpay-php-sdk/issues"
             },
-            "time": "2020-06-18T05:45:12+00:00"
+            "time": "2020-06-18T09:16:32+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
