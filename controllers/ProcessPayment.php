@@ -203,7 +203,7 @@ class ProcessPayment {
 	 * @return int Get YouPay ID.
 	 */
 	public function get_youpay_product_id(): int {
-		return 16738; // TODO: do this better
+		return $this->youpay->settings['product_id'];
 	}
 
 	/**

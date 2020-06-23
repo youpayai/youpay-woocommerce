@@ -23,6 +23,48 @@ class AdminController {
 		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 		$loader->add_action( 'admin_menu', $this, 'add_login_page' );
 		$loader->add_action( 'admin_post_process_youpay_login', $this, 'process_form_data' );
+		$loader->add_action( 'woocommerce_after_register_post_type', $this, 'check_youpay_product_exists', 10 );
+	}
+
+	/**
+	 * Check if the youpay product exits
+	 */
+	public function check_youpay_product_exists() {
+		if ( empty( $this->youpay->settings['product_id'] ) ) {
+			// Create product and save to settings.
+			$this->youpay->update_settings(
+				array(
+					'product_id' => $this->create_product(),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Create Product.
+	 *
+	 * @return int Product ID.
+	 */
+	public function create_product() {
+		$product = new \WC_Product();
+
+		$product->set_name( 'YouPay Product' ); // Name (title).
+		$product->set_description( 'YouPay Payment product. Please do not remove.' );
+		$product->set_short_description( '' );
+		$product->set_status( 'publish' );
+		$product->set_catalog_visibility( 'hidden' );
+		$product->set_featured( false );
+		$product->set_virtual( true );
+		$product->set_regular_price( 1 );
+		$product->set_price( 1 );
+		$product->set_downloadable( false );
+		$product->set_sold_individually( true );
+		$product->set_weight( '' );
+		$product->set_length( '' );
+		$product->set_width( '' );
+		$product->set_height( '' );
+		$product->set_reviews_allowed( false );
+		return $product->save();
 	}
 
 	public function enqueue_styles() {
