@@ -22,6 +22,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Constructor for the gateway.
 	 */
 	public function __construct() {
+		$this->youpay = new Startup();
 		// Setup general properties.
 		$this->show_all_billing_fields = $this->get_option( 'show_all_billing_fields' );
 		$this->setup_properties();
@@ -71,11 +72,11 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	protected function setup_properties() {
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->title              = __( 'YouPay', 'youpay' );
-		$this->description        = __( 'Send the bill to someone else.', 'youpay' );
-		$this->method_description = __( 'Send the bill to someone else.', 'youpay' );
+		$this->title              = '<img src="' . $this->youpay->resource_root .'/images/youpay-logo-dark.png" width="150" style="padding: 10px 0 10px 0;"> ';
+		$this->description        = '';//__( 'Let someone else pay for you.', 'youpay' );
+		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
-		$this->icon               = apply_filters( 'woocommerce_cod_icon', '' );
+		$this->icon               = '';
 		$this->has_fields         = false;
 	}
 

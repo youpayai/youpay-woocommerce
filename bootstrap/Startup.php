@@ -70,6 +70,13 @@ class Startup {
 	public $api;
 
 	/**
+	 * The Resource Root
+	 *
+	 * @var string Url.
+	 */
+	public $resource_root;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -77,11 +84,12 @@ class Startup {
 	 * the public-facing side of the site.
 	 */
 	public function __construct() {
-		$this->plugin_slug = self::$plugin_slug_static;
-		$this->settings    = get_option( $this->plugin_slug . '_settings', array() );
-		$this->version     = YOUPAY_VERSION;
-		$this->loader      = new Loader();
-		$this->api         = new Client();
+		$this->plugin_slug   = self::$plugin_slug_static;
+		$this->settings      = get_option( $this->plugin_slug . '_settings', array() );
+		$this->version       = YOUPAY_VERSION;
+		$this->loader        = new Loader();
+		$this->api           = new Client();
+		$this->resource_root = plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' );
 
 		// Setup Client Keys.
 		if ( ! empty( $this->settings['keys'] ) ) {

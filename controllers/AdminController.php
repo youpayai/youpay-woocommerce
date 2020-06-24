@@ -68,8 +68,7 @@ class AdminController {
 	}
 
 	public function enqueue_styles() {
-		$path = plugins_url( '/resources/css/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' );
-		wp_enqueue_style( $this->youpay->plugin_slug, $path . '/admin-styles.compiled.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->youpay->plugin_slug, $this->youpay->resource_root . '/css/admin-styles.compiled.css', array(), $this->version, 'all' );
 	}
 
 	public function enqueue_scripts() {
