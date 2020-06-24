@@ -1,0 +1,7 @@
+#wpcontent {
+@tailwind base;
+}
+
+@tailwind components;
+
+@tailwind utilities;
