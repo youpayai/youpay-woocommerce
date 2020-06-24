@@ -110,7 +110,7 @@ class AdminController {
 
 		$domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
 
-		$keys   = Client::auth( $post['email'], $post['password'], $domain );
+		$keys   = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
 
 		$this->youpay->update_settings(
 			array(

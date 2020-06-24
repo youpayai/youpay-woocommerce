@@ -295,6 +295,12 @@ class ProcessPayment {
 	 * @return bool
 	 */
 	public function cart_is_youpay() {
+
+		// Is there a cart? if not, then we are enabled.
+		if ( ! WC()->cart ) {
+			return false;
+		}
+
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 			if ( isset( $cart_item['youpay'] ) && $cart_item['youpay'] ) {
 				return true;
