@@ -86,6 +86,8 @@ class Startup {
 	public function __construct() {
 		$this->plugin_slug   = self::$plugin_slug_static;
 		$this->settings      = get_option( $this->plugin_slug . '_settings', array() );
+		$this->settings['woocommerce'] = get_option( 'woocommerce_' . $this->plugin_slug . '_settings', array() );
+
 		$this->version       = YOUPAY_VERSION;
 		$this->loader        = new Loader();
 		$this->api           = new Client();

@@ -1,49 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "2b75a4d9bd374df469b404e25359617f",
     "packages": [
-        {
-            "name": "MyWorkAus/youpay-php-sdk",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:MyWorkAus/youpay-php-sdk.git",
-                "reference": "d7aa5964e4bcf5309766a39250fa2590d379b65f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/d7aa5964e4bcf5309766a39250fa2590d379b65f",
-                "reference": "d7aa5964e4bcf5309766a39250fa2590d379b65f",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.5",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "symfony/var-dumper": "^5.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "YouPaySDK\\": "src"
-                }
-            },
-            "license": [
-                "GPL-2.0+"
-            ],
-            "description": "YouPay PHP SDK",
-            "support": {
-                "source": "https://github.com/MyWorkAus/youpay-php-sdk/tree/master",
-                "issues": "https://github.com/MyWorkAus/youpay-php-sdk/issues"
-            },
-            "time": "2020-06-22T23:42:51+00:00"
-        },
         {
             "name": "guzzlehttp/guzzle",
             "version": "6.5.5",
@@ -232,6 +194,44 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "myworkaus/youpay-php-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MyWorkAus/youpay-php-sdk.git",
+                "reference": "014323240701d75d6625e0a6d8309cc9761fd454"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/014323240701d75d6625e0a6d8309cc9761fd454",
+                "reference": "014323240701d75d6625e0a6d8309cc9761fd454",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.5",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^5.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "YouPaySDK\\": "src"
+                }
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "YouPay PHP SDK",
+            "support": {
+                "source": "https://github.com/MyWorkAus/youpay-php-sdk/tree/master",
+                "issues": "https://github.com/MyWorkAus/youpay-php-sdk/issues"
+            },
+            "time": "2020-07-06T01:02:15+00:00"
         },
         {
             "name": "psr/http-message",
@@ -713,5 +713,6 @@
     "platform": {
         "php": ">=7.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

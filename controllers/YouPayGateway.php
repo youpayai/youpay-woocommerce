@@ -42,6 +42,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$loader->add_filter( 'woocommerce_payment_complete_order_status', $this, 'change_payment_complete_order_status', 10, 3 );
 		$loader->add_action( 'woocommerce_email_before_order_table', $this, 'email_instructions', 10, 3 );
 		$loader->add_filter( 'woocommerce_payment_gateways', $this, 'add_your_gateway_class', 20, 1 );
+
+		$loader->add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, $this, 'process_admin_options', 10 );
 	}
 
 	/**
@@ -50,9 +52,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_available() {
-		if ( ProcessPayment::static_cart_is_youpay() ) {
-			return false;
-		}
+//		if ( ProcessPayment::static_cart_is_youpay() ) {
+//			return false;
+//		}
 		return parent::is_available();
 	}
 
@@ -72,11 +74,11 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	protected function setup_properties() {
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->title              = '<img src="' . $this->youpay->resource_root .'/images/youpay-logo-dark.png" width="150" style="padding: 10px 0 10px 0;"> ';
+		$this->title              = 'YouPay';
 		$this->description        = '';//__( 'Let someone else pay for you.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
-		$this->icon               = '';
+		$this->icon               = $this->youpay->resource_root .'/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
 	}
 
@@ -98,6 +100,13 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				'type'        => 'checkbox',
 				'description' => '',
 				'default'     => 'no',
+			),
+			'redirect_url'            => array(
+				'title'       => __( 'Redirect after payment url', 'woocommerce' ),
+				'label'       => 'Redirect after payment url',
+				'type'        => 'text',
+				'description' => '',
+				'default'     => '',
 			),
 		);
 	}
@@ -124,12 +133,12 @@ class YouPayGateway extends \WC_Payment_Gateway {
 
 			$order_items[] = OrderItem::create(
 				array(
-					'src'           => $image_url,
-					'product_id'    => $item->get_product_id(),
 					'order_item_id' => $item->get_id(),
+					'product_id'    => $item->get_product_id(),
 					'title'         => $item->get_name(),
-					'quantity'      => $item->get_quantity(),
+					'src'           => $image_url,
 					'price'         => $item->get_subtotal(),
+					'quantity'      => $item->get_quantity(),
 					'total'         => $item->get_total(),
 				)
 			);
@@ -148,6 +157,17 @@ class YouPayGateway extends \WC_Payment_Gateway {
 					'extra_fees'  => $extra_fees,
 					'sub_total'   => $order->get_subtotal(),
 					'total'       => $order->get_total(),
+					'receiver'    => array(
+						'name'      => rtrim( $order->shipping_first_name . ' ' . $order->shipping_last_name ),
+						'phone'     => $order->billing_phone,
+						'email'     => $order->billing_email,
+						'address_1' => $order->shipping_address_1,
+						'address_2' => $order->shipping_address_2,
+						'suburb'    => $order->shipping_city,
+						'state'     => $order->shipping_state,
+						'country'   => $order->shipping_country,
+						'postcode'  => $order->shipping_postcode,
+					),
 				)
 			);
 		} catch (\Exception $exception) {
@@ -174,14 +194,26 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		);
 	}
 
+	function redirect_after_purchase() {
+		global $wp;
+		if ( is_checkout() && !empty( $wp->query_vars['order-received'] ) && empty($_GET['test']) ) {
+			$order_id = $wp->query_vars['order-received'];
+			$youpay_order = wc_get_order( $order_id );
+			if ($youpay_order && $url = $youpay_order->get_meta( 'youpay_url', true )) {
+				$youpay_link  = 'https://youpay.link/share/' . $youpay_order->get_meta( 'youpay_url' );
+				wp_redirect( $youpay_link );
+				exit;
+			}
+
+		}
+	}
+
 	/**
 	 * Output for the order received page.
 	 *
 	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
-		$order = wc_get_order( $order_id );
-		$link  = 'https://youpay.link/' . $order->get_meta( 'youpay_url' );
 		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
 
