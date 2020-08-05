@@ -135,7 +135,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				array(
 					'order_item_id' => $item->get_id(),
 					'product_id'    => $item->get_product_id(),
-					'title'         => $item->get_name(),
+					'title'         => $product->get_name(),
 					'src'           => $image_url,
 					'price'         => $item->get_subtotal(),
 					'quantity'      => $item->get_quantity(),
