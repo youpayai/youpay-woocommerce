@@ -214,6 +214,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
+	    // TODO : cache
+	    $youpay_js = $this->youpay->api->getCheckoutJSUrl();
 		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
 

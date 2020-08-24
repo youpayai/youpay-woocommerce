@@ -10,7 +10,5 @@ $youpay_link  = 'https://youpay.link/' . $youpay_order->get_meta( 'youpay_url' )
 $youpay_order_id  = $youpay_order->get_meta( 'youpay_order_id' );
 
 ?>
-<div style="max-width: 600px; margin: 0 auto;">
-    <div id="youpay-share-app" data-id="<?php echo $youpay_order_id; ?>"></div>
-</div>
-<script src="https://youpay.link/checkout.js"></script>
+<div id="youpay-share-app" data-id="<?php echo $youpay_order_id; ?>"></div>
+<script src="<?php echo $youpay_js; ?>"></script>
