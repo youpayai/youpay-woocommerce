@@ -102,8 +102,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				'default'     => 'no',
 			),
 			'show_all_billing_fields' => array(
-				'title'       => __( 'Enable/Disable', 'woocommerce' ),
-				'label'       => __( 'Show all billing fields', 'youpay' ),
+				'title'       => __( 'Show all billing fields', 'youpay' ),
+				'label'       => '',
 				'type'        => 'checkbox',
 				'description' => '',
 				'default'     => 'no',
@@ -178,6 +178,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				)
 			);
 		} catch (\Exception $exception) {
+		    // TODO: handle error gracefully
 			dd($exception->getMessage());
 		}
 
