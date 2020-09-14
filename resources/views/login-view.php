@@ -17,6 +17,10 @@
                 <input id="password" name="password" type="password" placeholder="" />
             </div>
 
+            <?php if ( ! empty($_GET['yperror'])): ?>
+                <p class="yp-error">Invalid Credentials, please try again.</p>
+            <?php endif; ?>
+
             <input type="submit" value="Login">
         </form>
     </div>

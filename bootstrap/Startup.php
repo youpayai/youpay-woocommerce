@@ -98,8 +98,10 @@ class Startup {
 		// Setup Client Keys.
 		if ( ! empty( $this->settings['keys'] ) ) {
 			$keys = $this->settings['keys'];
-			$this->api->setToken( $keys->access_token );
-			$this->api->setStoreID( $keys->store_id );
+			if ( ! empty($keys->access_token) && ! empty($keys->store_id)) {
+			    $this->api->setToken( $keys->access_token );
+                $this->api->setStoreID( $keys->store_id );
+            }
 		}
 	}
 
@@ -171,7 +173,14 @@ class Startup {
 	}
 
 	public function plugin_redirect() {
-		if ( ! empty( $this->settings['redirect'] ) && ! isset( $_GET['mylogin'] ) ) {
+	    // Redirect once for all pages
+		if ( ( ! empty( $this->settings['redirect'] ) ||
+                (
+                    // Redirect all other pages except plugin page
+                    (empty( $this->settings['keys'] ) || empty( $this->settings['keys']->access_token ) )
+                    && (strpos($_SERVER['REQUEST_URI'], 'plugins.php') === false) && $_SERVER['REQUEST_METHOD'] === 'GET'
+                )
+            ) && ! isset( $_GET['mylogin'] ) ) {
 			wp_redirect(
 				admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' )
 			);

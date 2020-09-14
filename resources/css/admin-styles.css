@@ -53,3 +53,8 @@ body.admin_page_youpay_login_page {
     margin-top: 10px;
 }
 
+p.yp-error {
+    color: red;
+    margin: 0;
+    text-align: center;
+}

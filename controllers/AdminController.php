@@ -104,13 +104,22 @@ class AdminController {
 	public function process_form_data() {
 		$post = $_POST;
 		if ( empty( $post['email'] ) || empty( $post['password'] ) ) {
-			echo 'fail';
-			exit;
+            wp_redirect(
+                admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds'  )
+            );
+            exit;
 		}
 
 		$domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
 
 		$keys   = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
+
+		if ($keys->status_code !== 200) {
+            wp_redirect(
+                admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds'  )
+            );
+            exit;
+        }
 
 		$this->youpay->update_settings(
 			array(
@@ -119,13 +128,20 @@ class AdminController {
 			)
 		);
 
-		wp_redirect('/wp-admin/');
+		wp_redirect('/wp-admin/admin.php?page=wc-settings&tab=checkout&section=youpay');
 	}
 
 	/**
 	 * Page Content
 	 */
 	public function load_login_page() {
+	    // Remove Redirect Setting
+        $this->youpay->update_settings(
+            array(
+                'redirect' => false,
+            )
+        );
+
 		require_once YOUPAY_PLUGIN_PATH . 'resources/views/login-view.php';
 	}
 }
