@@ -4,6 +4,7 @@ namespace WooYouPay\bootstrap;
 
 use WooYouPay\controllers\AdminController;
 use WooYouPay\controllers\ProcessPayment;
+use WooYouPay\controllers\YouPayController;
 use WooYouPay\controllers\YouPayGateway;
 use WooYouPay\controllers\LoaderTrait;
 use YouPaySDK\Client;
@@ -23,7 +24,8 @@ class Startup {
 	 */
 	protected $controllers = array(
 		AdminController::class,
-		ProcessPayment::class,
+        ProcessPayment::class,
+        YouPayController::class,
 		'delay' => array(
 			YouPayGateway::class,
 		),
