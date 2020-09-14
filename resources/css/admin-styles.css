@@ -1,7 +1,55 @@
-#wpcontent {
-@tailwind base;
+body.admin_page_youpay_login_page {
+    background: rgb(14,217,220);
+    background: linear-gradient(0deg, rgba(14,217,220,0.75) 0%, rgba(47,58,146,0.75) 100%)
 }
 
-@tailwind components;
+.yp-form-control label {
+    display: block;
+    padding: 5px 0 5px;
+}
 
-@tailwind utilities;
+.yp-form-control input {
+    display: block;
+    margin: 0 0 10px;
+    width: 100%;
+    border-color: #d2d6dc;
+}
+
+.yp-login-box {
+    width: 270px;
+    margin: 4em auto 0;
+    background: #fff;
+    padding: 2em;
+    border-radius:1em;
+    box-shadow: 0em 0em 1em 1px #999;
+}
+
+.yp-login-box img {
+    margin: 0 auto 15px;
+    display: block;
+}
+
+.yp-login-box h2 {
+    margin: 0 0 1em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.admin_page_youpay_login_page .update-nag {
+    display: none!important;
+}
+
+.admin_page_youpay_login_page .notice {
+    display: none !important;
+}
+
+.yp-login-box input[type="submit"] {
+    width: 100%;
+    padding: 5px;
+    color: #fff;
+    background: #2f3a92;
+    border-radius: 0.5em;
+    border: 1px solid #232b6f;
+    margin-top: 10px;
+}
+
