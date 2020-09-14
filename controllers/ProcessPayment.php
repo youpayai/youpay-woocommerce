@@ -19,8 +19,10 @@ class ProcessPayment {
 	 * @param Loader $loader main loader var.
 	 */
 	public function loader( Loader $loader ) {
-		$loader->add_action( 'parse_request', $this, 'sniff_requests', 0 );
-		$loader->add_action( 'woocommerce_payment_complete', $this, 'payment_complete', 10, 1 );
+		$loader->add_action( 'parse_request', $this,
+            'sniff_requests', 0 );
+		$loader->add_action( 'woocommerce_payment_complete', $this,
+            'payment_complete', 10, 1 );
 	}
 
 	/**

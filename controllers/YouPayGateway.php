@@ -38,12 +38,19 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param \WooYouPay\bootstrap\Loader $loader
 	 */
 	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
-		$loader->add_action( 'woocommerce_thankyou_' . $this->id, $this, 'thankyou_page', 10, 1 );
-		$loader->add_filter( 'woocommerce_payment_complete_order_status', $this, 'change_payment_complete_order_status', 10, 3 );
-		$loader->add_action( 'woocommerce_email_before_order_table', $this, 'email_instructions', 10, 3 );
-		$loader->add_filter( 'woocommerce_payment_gateways', $this, 'add_your_gateway_class', 20, 1 );
+	    // Actions
+		$loader->add_action( 'woocommerce_thankyou_' . $this->id, $this,
+            'thankyou_page', 10, 1 );
+		$loader->add_action( 'woocommerce_email_before_order_table', $this,
+            'email_instructions', 10, 3 );
+		$loader->add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, $this,
+            'process_admin_options', 10 );
 
-		$loader->add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, $this, 'process_admin_options', 10 );
+		// Filters
+		$loader->add_filter( 'woocommerce_payment_complete_order_status', $this,
+            'change_payment_complete_order_status', 10, 3 );
+		$loader->add_filter( 'woocommerce_payment_gateways', $this,
+            'add_your_gateway_class', 20, 1 );
 	}
 
 	/**
