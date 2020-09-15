@@ -93,7 +93,19 @@ class AdminController {
 			)
 		);
 
-		wp_redirect('/wp-admin/admin.php?page=wc-settings&tab=checkout&section=youpay');
+        $store = $this->youpay->api->getStore($keys->store_id);
+        if ( empty($store->payment_gateways) ) {
+            $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways";
+            wp_redirect($url);
+            exit;
+        } else {
+            $this->youpay->update_settings([
+                'has_payment_gateways' => true
+            ]);
+        }
+
+        wp_redirect('/wp-admin/admin.php?page=wc-settings&tab=checkout&section=youpay');
+        exit;
 	}
 
 	/**
