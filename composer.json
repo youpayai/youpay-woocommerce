@@ -29,9 +29,7 @@
             "bootstrap"
         ],
         "psr-4": {
-            "WooYouPay\\": [
-                "/"
-            ]
+            "WooYouPay\\": "./"
         }
     }
 }

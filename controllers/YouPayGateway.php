@@ -179,7 +179,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 			);
 		} catch (\Exception $exception) {
 		    // TODO: handle error gracefully
-			dd($exception->getMessage());
+			throw $exception;
 		}
 
 		// TODO: Handle Errors from requests.

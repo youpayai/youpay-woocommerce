@@ -68,7 +68,7 @@ class AdminController {
 	}
 
 	public function enqueue_styles() {
-		wp_enqueue_style( $this->youpay->plugin_slug, $this->youpay->resource_root . '/css/admin-styles.compiled.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->youpay->plugin_slug, $this->youpay->resource_root . '/css/admin-styles.css', array(), $this->youpay->version, 'all' );
 	}
 
 	public function enqueue_scripts() {
