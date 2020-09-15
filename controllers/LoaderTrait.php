@@ -6,10 +6,7 @@ use WooYouPay\bootstrap\Loader;
 use WooYouPay\bootstrap\Startup;
 
 /**
- * The file that defines the core plugin class
- *
- * A class definition that bootstrap attributes and functions used across both the
- * public-facing side of the site and the resources area.
+ * A trait that gives the plugin controllers access to settings and the loader function
  */
 trait LoaderTrait {
 
@@ -48,7 +45,8 @@ trait LoaderTrait {
 		$this->loader( $youpay->loader );
 
 		/**
-		 * Legacy Code
+		 * Legacy Code.
+         * TODO: Cleanup, I think something weird needs these still
 		 */
 		$this->plugin_settings = $youpay->settings;
 		$this->plugin_slug     = $youpay->plugin_slug;

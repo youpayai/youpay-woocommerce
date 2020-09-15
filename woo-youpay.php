@@ -21,8 +21,6 @@ if ( ! defined( 'YOUPAY_VERSION' ) ) {
 	define( 'YOUPAY_VERSION', '1.0.0' );
 }
 
-//require_once 'bootstrap-local.php';
-
 if ( ! defined( 'YOUPAY_PLUGIN_PATH' ) ) {
 	define( 'YOUPAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 }
@@ -31,7 +29,6 @@ require_once YOUPAY_PLUGIN_PATH . 'vendor/autoload.php';
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-junior-zoho-activator.php
  */
 function activate() {
 	\WooYouPay\bootstrap\Startup::activate();
@@ -39,7 +36,6 @@ function activate() {
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-junior-zoho-deactivator.php
  */
 function deactivate() {
 	\WooYouPay\bootstrap\Startup::deactivate();

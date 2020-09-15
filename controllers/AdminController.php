@@ -110,7 +110,8 @@ class AdminController {
             exit;
 		}
 
-		$domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
+        $domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
+        $domain = strstr( $domain, '/', true );
 
 		$keys   = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
 

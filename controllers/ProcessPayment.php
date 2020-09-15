@@ -21,8 +21,6 @@ class ProcessPayment {
 	public function loader( Loader $loader ) {
 		$loader->add_action( 'parse_request', $this,
             'sniff_requests', 0 );
-		$loader->add_action( 'woocommerce_payment_complete', $this,
-            'payment_complete', 10, 1 );
 	}
 
 	/**
@@ -37,8 +35,8 @@ class ProcessPayment {
 
 		$youpay_order_id = $order->get_meta( 'youpay_order_id' );
 
-		$processed = $order->get_meta( 'youpay_processed', 'true' );
-
+		// Check if we have already processed this
+        $processed = $order->get_meta( 'youpay_processed', 'true' );
 		if ( $processed ) {
 			wp_safe_redirect( $this->youpay->settings['woocommerce']['redirect_url'] );
 			exit;
@@ -46,22 +44,31 @@ class ProcessPayment {
 
 		$youpay_order = $this->youpay->api->getOrder( $youpay_order_id );
 
+		// This shouldn't ever pass as true
 		if ( ! $youpay_order->completed && empty( (float) $youpay_order->balance ) ) {
 			throw new \Exception( 'Error, not paid.' );
 		}
 
+		// Get the amount paid on YouPay and set a discount on this product for that amount
 		$amount_paid = (float) $youpay_order->total;
-
 		$order->set_discount_total( $amount_paid );
 
+		// Update the Order Total
 		$previous_total = (float) $order->get_total();
 		$order->set_total( $previous_total - $amount_paid );
 
+		// Mark Order as processed
 		$order->add_meta_data( 'youpay_processed', 'true' );
+		// TODO: Allow the status to be set by options
 		$order->update_status( 'processing', 'Payment taken by YouPay. Order ID: ' . $youpay_order_id );
 		$order->save();
 
-		wp_safe_redirect( $this->youpay->settings['woocommerce']['redirect_url'] );
+		// Redirect to the front page if there is nowhere set
+        if (empty($this->youpay->settings['woocommerce']) || empty($this->youpay->settings['woocommerce']['redirect_url'])) {
+            wp_safe_redirect( '/' );
+        }
+
+        wp_safe_redirect( $this->youpay->settings['woocommerce']['redirect_url'] );
 		exit;
 	}
 
@@ -73,11 +80,9 @@ class ProcessPayment {
 	 * @throws \Exception Exception.
 	 */
 	public function sniff_requests() {
-		global $wp;
 		if ( ! empty( $_GET['youpay_id'] ) ) {
 			$this->payment_complete();
-			exit; ///11.45 17th.....
-			return;
+			exit;
 		}
 	}
 }

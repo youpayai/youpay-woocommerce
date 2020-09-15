@@ -26,6 +26,7 @@ class Startup {
 		AdminController::class,
         ProcessPayment::class,
         YouPayController::class,
+		// Delayed Controllers, so that it is included after all other plugins
 		'delay' => array(
 			YouPayGateway::class,
 		),
@@ -33,13 +34,6 @@ class Startup {
 
 	public static $plugin_slug_static = 'youpay';
 	public $plugin_slug;
-
-	/**
-	 * The CLI Command name
-	 *
-	 * @var string
-	 */
-	protected $cli_command = 'youpay';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -116,11 +110,13 @@ class Startup {
 	 * Load the controllers
 	 */
 	public function sort_controllers() {
+	    // Delay Certain Controllers due to WooComm
 		$delayed = $this->controllers['delay'] ?? false;
 		unset( $this->controllers['delay'] );
 
 		$this->load_controllers();
 
+		// Handle Delayed Controllers
 		if ( ! empty( $delayed ) ) {
 			$this->controllers = $delayed;
 			$this->loader->add_action( 'plugins_loaded', $this, 'load_delayed' );
@@ -145,22 +141,11 @@ class Startup {
 		$self = new self();
 		$self->sort_controllers();
 		$self->loader();
-		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
-			\WP_CLI::add_command( $self->cli_command, '\WooYouPay\controllers\CliController' );
-		}
-		$self->loader->run();
-	}
-
-	/**
-	 * Init Controller
-	 *
-	 * @param string $controller The Controller Class Name.
-	 * @return mixed|LoaderTrait
-	 */
-	protected function init_controller( string $controller ) {
-		$controller = new $controller();
-		$controller->init( $this );
-		return $controller;
+        $self->loader->run();
+        // TODO: Add CLI Commands
+//		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
+//			\WP_CLI::add_command( $self->plugin_slug, '\WooYouPay\controllers\CliController' );
+//		}
 	}
 
 	/**
@@ -172,8 +157,24 @@ class Startup {
 		}
 	}
 
+	/**
+	 * Initialise a Controller
+	 *
+	 * @param string $controller Controller Class Name.
+	 * @return mixed|LoaderTrait
+	 */
+	protected function init_controller( string $controller ) {
+		$controller = new $controller();
+		$controller->init( $this );
+		return $controller;
+	}
+
+    /**
+     * Redirect to login page logic
+     * TODO: Replace with banner message
+     */
 	public function plugin_redirect() {
-	    // Redirect once for all pages
+	    // if redirect var set (only exists on first redirect)
 		if ( ( ! empty( $this->settings['redirect'] ) ||
                 (
                     // Redirect all other pages except plugin page
