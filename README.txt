@@ -1,4 +1,4 @@
-=== YouPay - WooCommerce ===
+=== YouPay for WooCommerce ===
 Contributors: jeraNS
 Requires at least: 5.0
 Tested up to: 1.0

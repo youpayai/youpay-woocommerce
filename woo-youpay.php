@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       YouPay - WooCommerce
+ * Plugin Name:       YouPay for WooCommerce
  * Plugin URI:        http://youpay.link/
  * Description:       Send the bill to someone else to pay.
  * Version:           1.0.0
