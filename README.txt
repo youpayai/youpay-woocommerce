@@ -1,5 +1,5 @@
 === YouPay for WooCommerce ===
-Contributors: jeraNS
+Contributors: claraleigh, bmett
 Requires at least: 5.0
 Tested up to: 1.0
 Requires PHP: 7.0
