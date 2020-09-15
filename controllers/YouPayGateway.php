@@ -59,10 +59,29 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_available() {
-		if ( $this->youpay->has_api_keys ) {
-			return false;
-		}
-		return parent::is_available();
+	    // Always Return false if its disabled
+	    if ( ! parent::is_available()) {
+	        return false;
+        }
+	    // Check we have
+		if ( ! $this->youpay->has_api_keys ) {
+		    return false;
+        }
+        if ( empty($this->youpay->settings['has_payment_gateways']) ) {
+            try {
+                $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
+            } catch (\Exception $exception) {
+                return false;
+            }
+            if ( empty($store) || empty($store->payment_gateways) ) {
+                return false;
+            } else {
+                $this->youpay->update_settings(array(
+                    'has_payment_gateways' => true
+                ));
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -88,6 +107,27 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$this->icon               = YOUPAY_RESOURCE_ROOT .'/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
 	}
+
+    /**
+     * Output the gateway settings screen.
+     */
+    public function admin_options() {
+        parent::admin_options();
+        if (empty($this->youpay->settings['has_payment_gateways'])) {
+            $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
+            if (empty($store->payment_gateways)) {
+                $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$store->id}&viaRelationship=payment_gateways";
+                echo "<div class='error'><p><strong>No Payment Gateway setup on YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
+                echo "<span style='color:#f00'>WARNING: NO PAYMENT GATEWAY HAS BEEN SETUP.</span><br>";
+                echo "<a href='$url' target='_blank'>Click here to add a Payment Gateway</a>";
+            } else {
+                $this->youpay->update_settings([
+                    'has_payment_gateways' => true
+                ]);
+            }
+        }
+
+    }
 
 	/**
 	 * Initialise Gateway Settings Form Fields.

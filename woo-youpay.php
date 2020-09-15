@@ -25,10 +25,6 @@ if ( ! defined( 'YOUPAY_PLUGIN_PATH' ) ) {
 	define( 'YOUPAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 }
 
-if ( ! defined( 'YOUPAY_RESOURCE_ROOT' ) ) {
-    define('YOUPAY_RESOURCE_ROOT', plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' ));
-}
-
 require_once YOUPAY_PLUGIN_PATH . 'vendor/autoload.php';
 
 /**

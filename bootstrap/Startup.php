@@ -87,6 +87,11 @@ class Startup {
 	 * the public-facing side of the site.
 	 */
 	public function __construct() {
+
+        if ( ! defined( 'YOUPAY_RESOURCE_ROOT' ) ) {
+            define('YOUPAY_RESOURCE_ROOT', plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' ));
+        }
+
 		$this->plugin_slug   = self::$plugin_slug_static;
 		$this->settings      = get_option( $this->plugin_slug . '_settings', array() );
 		$this->settings['woocommerce'] = get_option( 'woocommerce_' . $this->plugin_slug . '_settings', array() );
