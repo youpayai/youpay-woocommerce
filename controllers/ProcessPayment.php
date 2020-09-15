@@ -66,6 +66,7 @@ class ProcessPayment {
 		// Redirect to the front page if there is nowhere set
         if (empty($this->youpay->settings['woocommerce']) || empty($this->youpay->settings['woocommerce']['redirect_url'])) {
             wp_safe_redirect( '/' );
+            exit;
         }
 
         wp_safe_redirect( $this->youpay->settings['woocommerce']['redirect_url'] );

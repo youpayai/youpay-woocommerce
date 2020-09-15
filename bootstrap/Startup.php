@@ -65,6 +65,13 @@ class Startup {
 	 */
 	public $api;
 
+    /**
+     * Has Api Keys
+     *
+     * @var bool
+     */
+    public $has_api_keys;
+
 	/**
 	 * The Resource Root
 	 *
@@ -87,7 +94,7 @@ class Startup {
 		$this->version       = YOUPAY_VERSION;
 		$this->loader        = new Loader();
 		$this->api           = new Client();
-		$this->resource_root = plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' );
+		$this->resource_root = YOUPAY_RESOURCE_ROOT;
 
 		// Setup Client Keys.
 		if ( ! empty( $this->settings['keys'] ) ) {
@@ -95,6 +102,7 @@ class Startup {
 			if ( ! empty($keys->access_token) && ! empty($keys->store_id)) {
 			    $this->api->setToken( $keys->access_token );
                 $this->api->setStoreID( $keys->store_id );
+                $this->has_api_keys = true;
             }
 		}
 	}

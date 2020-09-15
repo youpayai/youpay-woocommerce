@@ -5,20 +5,20 @@ use WooYouPay\bootstrap\Startup;
 use YouPaySDK\OrderItem;
 
 /**
- * Cash on Delivery Gateway.
+ * YouPay Payment Gateway
  *
  * Provides a Cash on Delivery Payment Gateway.
  *
- * @class	   WC_Gateway_COD
+ * @class	 YouPayGateway
  * @extends	 WC_Payment_Gateway
- * @version	 2.1.0
- * @package	 WooCommerce/Classes/Payment
+ * @version	 1.0.0
+ * @package	 WooYouPay/controllers
  */
 class YouPayGateway extends \WC_Payment_Gateway {
 
 	use LoaderTrait;
 
-	/**
+    /**
 	 * Constructor for the gateway.
 	 */
 	public function __construct() {
@@ -59,9 +59,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_available() {
-//		if ( ProcessPayment::static_cart_is_youpay() ) {
-//			return false;
-//		}
+		if ( $this->youpay->has_api_keys ) {
+			return false;
+		}
 		return parent::is_available();
 	}
 
@@ -85,7 +85,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$this->description        = '';//__( 'Let someone else pay for you.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
-		$this->icon               = $this->youpay->resource_root .'/images/youpay-logo-dark-100.png';
+		$this->icon               = YOUPAY_RESOURCE_ROOT .'/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
 	}
 
@@ -127,7 +127,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if (empty($this->youpay)) {
+		if ( empty( $this->youpay ) ) {
 			$this->youpay = new Startup();
 		}
 

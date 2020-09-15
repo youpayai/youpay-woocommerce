@@ -20,59 +20,23 @@ class AdminController {
 	 */
 	public function loader( Loader $loader ) {
 		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_styles' );
-		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
+//		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_scripts' );
 		$loader->add_action( 'admin_menu', $this, 'add_login_page' );
 		$loader->add_action( 'admin_post_process_youpay_login', $this, 'process_form_data' );
-		$loader->add_action( 'woocommerce_after_register_post_type', $this, 'check_youpay_product_exists', 10 );
 	}
 
-	/**
-	 * Check if the youpay product exits
-	 */
-	public function check_youpay_product_exists() {
-		if ( empty( $this->youpay->settings['product_id'] ) ) {
-			// Create product and save to settings.
-			$this->youpay->update_settings(
-				array(
-					'product_id' => $this->create_product(),
-				)
-			);
-		}
-	}
-
-	/**
-	 * Create Product.
-	 *
-	 * @return int Product ID.
-	 */
-	public function create_product() {
-		$product = new \WC_Product();
-
-		$product->set_name( 'YouPay Product' ); // Name (title).
-		$product->set_description( 'YouPay Payment product. Please do not remove.' );
-		$product->set_short_description( '' );
-		$product->set_status( 'publish' );
-		$product->set_catalog_visibility( 'hidden' );
-		$product->set_featured( false );
-		$product->set_virtual( true );
-		$product->set_regular_price( 1 );
-		$product->set_price( 1 );
-		$product->set_downloadable( false );
-		$product->set_sold_individually( true );
-		$product->set_weight( '' );
-		$product->set_length( '' );
-		$product->set_width( '' );
-		$product->set_height( '' );
-		$product->set_reviews_allowed( false );
-		return $product->save();
-	}
-
+    /**
+     * Load our StyleSheet in the admin area
+     */
 	public function enqueue_styles() {
 		wp_enqueue_style( $this->youpay->plugin_slug, $this->youpay->resource_root . '/css/admin-styles.css', array(), $this->youpay->version, 'all' );
 	}
 
+    /**
+     * Add admin script : currently unused
+     */
 	public function enqueue_scripts() {
-		wp_enqueue_script( $this->youpay->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/js/resources-script.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->youpay->plugin_slug, YOUPAY_PLUGIN_PATH . '/resources/js/resources-script.js', array( 'jquery' ), $this->youpay->version, false );
 	}
 
 	/**
@@ -133,7 +97,7 @@ class AdminController {
 	}
 
 	/**
-	 * Page Content
+	 * Show the login page content
 	 */
 	public function load_login_page() {
 	    // Remove Redirect Setting
