@@ -77,7 +77,14 @@ class AdminController {
         $domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
         $domain = strstr( $domain, '/', true );
 
-		$keys   = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
+        try {
+		    $keys   = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
+        } catch (\Exception $exception) {
+            wp_redirect(
+                admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds'  )
+            );
+            exit;
+        }
 
 		if ($keys->status_code !== 200) {
             wp_redirect(

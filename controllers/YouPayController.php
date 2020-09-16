@@ -19,8 +19,9 @@ class YouPayController {
 	 * @param Loader $loader main loader var.
 	 */
 	public function loader( Loader $loader ) {
-        $loader->add_filter( 'woocommerce_get_order_address', $this,
-            'get_order_address_filter', 20, 3 );
+	    // This breaks functionality.
+//        $loader->add_filter( 'woocommerce_get_order_address', $this,
+//            'get_order_address_filter', 20, 3 );
 
         $loader->add_action( 'add_meta_boxes', $this,
             'mv_add_meta_boxes', 20, 2 );
