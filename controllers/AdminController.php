@@ -104,12 +104,13 @@ class AdminController {
         $this->youpay->api->setStoreID( $keys->store_id );
         $this->youpay->has_api_keys = true;
 
+        $next_url = admin_url('admin.php?page=wc-settings&tab=checkout&section=youpay');
         // Get store information
         try {
             $store = $this->youpay->api->getStore($keys->store_id);
         } catch (\Exception $exception) { }
         if ( empty($store->payment_gateways) ) {
-            $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways";
+            $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways&redirect_after=" . $next_url;
             wp_redirect($url);
             exit;
         } else {
@@ -118,7 +119,7 @@ class AdminController {
             ]);
         }
 
-        wp_redirect('/wp-admin/admin.php?page=wc-settings&tab=checkout&section=youpay');
+        wp_redirect( $next_url );
         exit;
 	}
 
