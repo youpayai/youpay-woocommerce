@@ -37,9 +37,9 @@ printf "\n"
 
 print_style "Preping...." "info"
 rm -rf ${TARGETDIR}
-printf "."
+print_style "." "info"
 mkdir "${TARGETDIR}"
-printf ".\n"
+print_style ".\n" "info"
 
 print_style "Copying all files" "info"
 for file in *
@@ -60,6 +60,8 @@ print_style "Installing Composer...\n" "info"
 composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --no-suggest --optimize-autoloader --classmap-authoritative &>/dev/null
 
 print_style "Composer Installed\n" "success"
+rm -rf composer.json
+rm -rf composer.lock
 cd ../
 
 print_style "Zipping\n" "info"
