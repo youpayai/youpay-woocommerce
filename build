@@ -1,7 +1,8 @@
 #!/bin/bash
 
-ZIP="youpay-woocommerce.zip"
-TARGETDIR='deploy'
+PROJECT="youpay-woocommerce"
+ZIP="${PROJECT}.zip"
+TARGETDIR="${PROJECT}"
 
 ######## Setup Functions #############
 # prints colored text
