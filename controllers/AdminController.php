@@ -99,6 +99,12 @@ class AdminController {
 			)
 		);
 
+		// ReSet API Keys
+        $this->youpay->api->setToken( $keys->access_token );
+        $this->youpay->api->setStoreID( $keys->store_id );
+        $this->youpay->has_api_keys = true;
+
+        // Get store information
         $store = $this->youpay->api->getStore($keys->store_id);
         if ( empty($store->payment_gateways) ) {
             $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways";
