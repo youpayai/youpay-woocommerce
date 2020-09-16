@@ -114,16 +114,20 @@ class YouPayGateway extends \WC_Payment_Gateway {
     public function admin_options() {
         parent::admin_options();
         if (empty($this->youpay->settings['has_payment_gateways'])) {
-            $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
-            if (empty($store->payment_gateways)) {
-                $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$store->id}&viaRelationship=payment_gateways";
-                echo "<div class='error'><p><strong>No Payment Gateway setup on YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
-                echo "<span style='color:#f00'>WARNING: NO PAYMENT GATEWAY HAS BEEN SETUP.</span><br>";
-                echo "<a href='$url' target='_blank'>Click here to add a Payment Gateway</a>";
-            } else {
-                $this->youpay->update_settings([
-                    'has_payment_gateways' => true
-                ]);
+            try {
+                $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
+                if (empty($store->payment_gateways)) {
+                    $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$store->id}&viaRelationship=payment_gateways";
+                    echo "<div class='error'><p><strong>No Payment Gateway setup on YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
+                    echo "<span style='color:#f00'>WARNING: NO PAYMENT GATEWAY HAS BEEN SETUP.</span><br>";
+                    echo "<a href='$url' target='_blank'>Click here to add a Payment Gateway</a>";
+                } else {
+                    $this->youpay->update_settings([
+                        'has_payment_gateways' => true
+                    ]);
+                }
+            } catch (\Exception $exception) {
+                echo "<div class='error'><p><strong>Error contacting YouPay, please try re-installing.</strong></p></div>";
             }
         }
 

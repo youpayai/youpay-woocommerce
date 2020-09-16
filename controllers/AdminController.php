@@ -105,7 +105,9 @@ class AdminController {
         $this->youpay->has_api_keys = true;
 
         // Get store information
-        $store = $this->youpay->api->getStore($keys->store_id);
+        try {
+            $store = $this->youpay->api->getStore($keys->store_id);
+        } catch (\Exception $exception) { }
         if ( empty($store->payment_gateways) ) {
             $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways";
             wp_redirect($url);
