@@ -39,7 +39,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
 	    // Actions
-		$loader->add_action( 'woocommerce_thankyou_' . $this->id, $this,
+        $loader->add_action( 'woocommerce_before_thankyou', $this,
             'thankyou_page', 10, 1 );
 		$loader->add_action( 'woocommerce_email_before_order_table', $this,
             'email_instructions', 10, 3 );
@@ -266,7 +266,11 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
-	    // TODO : cache
+        $youpay_order = wc_get_order( $order_id );
+        $youpay_order_id  = $youpay_order->get_meta( 'youpay_order_id' );
+        if ( empty($youpay_order_id) ) {
+            return;
+        }
 	    $youpay_js = $this->youpay->api->getCheckoutJSUrl();
 		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
