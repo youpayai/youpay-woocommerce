@@ -267,6 +267,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	public function thankyou_page( $order_id ) {
         $youpay_order = wc_get_order( $order_id );
+        $recipient_name = $youpay_order->get_billing_first_name();
         $youpay_order_id  = $youpay_order->get_meta( 'youpay_order_id' );
         if ( empty($youpay_order_id) ) {
             return;
