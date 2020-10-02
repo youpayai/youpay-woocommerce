@@ -25,6 +25,36 @@ class YouPayController {
 
         $loader->add_action( 'add_meta_boxes', $this,
             'mv_add_meta_boxes', 20, 2 );
+
+        $loader->add_action( 'init', $this,
+            'register_shortcodes', 10 );
+    }
+
+    /**
+     * Register the shortcodes
+     */
+    public function register_shortcodes() {
+        add_shortcode('youpay-popup', array($this, 'youpay_popup'));
+
+//        wp_register_script( 'youpay-popup',
+//            $this->youpay->api->api_url . '/js/popup.js', array(), '1.0.0', 'all' );
+    }
+
+    /**
+     * Do the YouPay Shortcode
+     *
+     * @param $atts
+     */
+    public function youpay_popup($atts) {
+        extract(shortcode_atts(array(
+            'product' => false,
+        ), $atts));
+
+        $script = '<script src="' . $this->youpay->api->api_url . 'popup.js?version=' . time() . '"></script>';
+        if ( empty ($product)) {
+            return '<div id="youpay-popup" data-x="x"></div>' . $script;
+        }
+        return '<div id="youpay-popup" data-full="true"></div>' . $script;
     }
 
     /**
