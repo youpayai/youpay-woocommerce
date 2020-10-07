@@ -50,12 +50,12 @@ class ProcessPayment {
 		}
 
 		// Get the amount paid on YouPay and set a discount on this product for that amount
-		$amount_paid = (float) $youpay_order->total;
-		$order->set_discount_total( $amount_paid );
+//		$amount_paid = (float) $youpay_order->total;
+//		$order->set_discount_total( $amount_paid );
 
 		// Update the Order Total
-		$previous_total = (float) $order->get_total();
-		$order->set_total( $previous_total - $amount_paid );
+//		$previous_total = (float) $order->get_total();
+//		$order->set_total( $previous_total - $amount_paid );
 
 		// Mark Order as processed
 		$order->add_meta_data( 'youpay_processed', 'true' );
