@@ -215,10 +215,26 @@ class Startup {
 			@trigger_error( 'Please install Woocommerce before activating.', E_USER_ERROR );
 		}
 
-		update_option(
-			self::$plugin_slug_static . '_settings',
-			array( 'redirect' => true )
-		);
+		// TODO: create page
+        $wordpress_page = array(
+            'post_title'    => 'YouPay Payment Processed',
+            'post_content'  => '[youpay-success]',
+            'post_status'   => 'publish',
+            'post_author'   => 1,
+            'post_type' => 'page'
+        );
+        $post_id = wp_insert_post( $wordpress_page );
+
+        // TODO: check if settings already exist
+        update_option(
+            self::$plugin_slug_static . '_settings',
+            array(
+                'redirect' => true,
+                'woocommerce' => array(
+                    'redirect_url' => get_permalink($post_id)
+                )
+            )
+        );
 	}
 
 	/**

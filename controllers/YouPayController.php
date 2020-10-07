@@ -35,6 +35,7 @@ class YouPayController {
      */
     public function register_shortcodes() {
         add_shortcode('youpay-popup', array($this, 'youpay_popup'));
+        add_shortcode('youpay-success', array($this, 'youpay_success'));
 
 //        wp_register_script( 'youpay-popup',
 //            $this->youpay->api->api_url . '/js/popup.js', array(), '1.0.0', 'all' );
@@ -45,7 +46,7 @@ class YouPayController {
      *
      * @param $atts
      */
-    public function youpay_popup($atts) {
+    public function youpay_popup ( $atts ) {
         extract(shortcode_atts(array(
             'product' => false,
         ), $atts));
@@ -55,6 +56,18 @@ class YouPayController {
             return '<div id="youpay-popup" data-x="x"></div>' . $script;
         }
         return '<div id="youpay-popup" data-full="true"></div>' . $script;
+    }
+
+    /**
+     * Get the default success page html content
+     */
+    public function youpay_success () {
+        ob_start();
+        //include the specified file
+        include YOUPAY_PLUGIN_PATH . '/resources/views/payment-success.php';
+        //assign the file output to $content variable and clean buffer
+        $content = ob_get_clean();
+        return $content;
     }
 
     /**
