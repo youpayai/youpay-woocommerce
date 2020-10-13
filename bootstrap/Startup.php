@@ -230,9 +230,12 @@ class Startup {
             self::$plugin_slug_static . '_settings',
             array(
                 'redirect' => true,
-                'woocommerce' => array(
-                    'redirect_url' => get_permalink($post_id)
-                )
+            )
+        );
+        update_option(
+            'woocommerce_' . self::$plugin_slug_static . '_settings',
+            array(
+                'redirect_url' => get_permalink($post_id)
             )
         );
 	}
