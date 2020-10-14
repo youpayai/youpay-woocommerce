@@ -161,6 +161,13 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				'description' => '',
 				'default'     => '',
 			),
+			'show_on_product_page' => array(
+				'title'       => __( 'Show YouPay text on product page', 'youpay' ),
+				'label'       => '',
+				'type'        => 'checkbox',
+				'description' => '',
+				'default'     => 'no',
+			),
 		);
 	}
 

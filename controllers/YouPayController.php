@@ -28,6 +28,17 @@ class YouPayController {
 
         $loader->add_action( 'init', $this,
             'register_shortcodes', 10 );
+
+        $loader->add_filter( 'woocommerce_short_description', $this, 
+            'youpay_text', 10, 1);
+    }
+
+    public function youpay_text($desc) {
+        if($this->youpay->settings['woocommerce']['show_on_product_page']) {
+            return do_shortcode('[youpay-popup product="true"]') . "<br/>" . $desc;
+        }else{
+            return $desc;
+        }
     }
 
     /**
