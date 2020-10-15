@@ -124,7 +124,10 @@ class Startup {
 	 */
 	public function sort_controllers() {
 	    // Delay Certain Controllers due to WooComm
-		$delayed = $this->controllers['delay'] ?? false;
+        $delayed = false;
+        if (! empty($this->controllers['delay'])) {
+            $delayed = $this->controllers['delay'];
+        }
 		unset( $this->controllers['delay'] );
 
 		$this->load_controllers();
