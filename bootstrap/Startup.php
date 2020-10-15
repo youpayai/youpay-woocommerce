@@ -179,7 +179,7 @@ class Startup {
 	 * @param string $controller Controller Class Name.
 	 * @return mixed|LoaderTrait
 	 */
-	protected function init_controller( string $controller ) {
+	protected function init_controller( $controller ) {
 		$controller = new $controller();
 		$controller->init( $this );
 		return $controller;
