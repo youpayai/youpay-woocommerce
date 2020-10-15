@@ -39,7 +39,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
 	    // Actions
-        $loader->add_action( 'woocommerce_before_thankyou', $this,
+            //$loader->add_action( 'woocommerce_before_thankyou', $this,
+            //'thankyou_page', 10, 1 );
+	     $loader->add_action( 'woocommerce_thankyou_' . $this->id, $this,
             'thankyou_page', 10, 1 );
 		$loader->add_action( 'woocommerce_email_before_order_table', $this,
             'email_instructions', 10, 3 );
@@ -158,6 +160,13 @@ class YouPayGateway extends \WC_Payment_Gateway {
 				'type'        => 'text',
 				'description' => '',
 				'default'     => '',
+			),
+			'show_on_product_page' => array(
+				'title'       => __( 'Show YouPay text on product page', 'youpay' ),
+				'label'       => '',
+				'type'        => 'checkbox',
+				'description' => '',
+				'default'     => 'no',
 			),
 		);
 	}
