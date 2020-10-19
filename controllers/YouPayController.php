@@ -34,7 +34,7 @@ class YouPayController {
     }
 
     public function youpay_text($desc) {
-        if($this->youpay->settings['woocommerce']['show_on_product_page']) {
+        if(is_product() && $this->youpay->settings['woocommerce']['show_on_product_page']) {
             return do_shortcode('[youpay-popup product="true"]') . "<br/>" . $desc;
         }else{
             return $desc;
