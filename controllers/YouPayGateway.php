@@ -24,7 +24,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	public function __construct() {
 		$this->youpay = new Startup();
 		// Setup general properties.
-		$this->show_all_billing_fields = $this->get_option( 'show_all_billing_fields' );
 		$this->setup_properties();
 
 		// Load the settings.
@@ -139,36 +138,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Initialise Gateway Settings Form Fields.
 	 */
 	public function init_form_fields() {
-		$this->form_fields = array(
-			'enabled' => array(
-				'title'       => __( 'Enable/Disable', 'woocommerce' ),
-				'label'       => __( 'Enable YouPay', 'youpay' ),
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-			'show_all_billing_fields' => array(
-				'title'       => __( 'Show all billing fields', 'youpay' ),
-				'label'       => '',
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-			'redirect_url'            => array(
-				'title'       => __( 'Redirect after payment url', 'woocommerce' ),
-				'label'       => 'Redirect after payment url',
-				'type'        => 'text',
-				'description' => '',
-				'default'     => '',
-			),
-			'show_on_product_page' => array(
-				'title'       => __( 'Show YouPay text on product page', 'youpay' ),
-				'label'       => '',
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-		);
+        include YOUPAY_PLUGIN_PATH . 'resources/views/form_fields.php';
 	}
 
 	/**
