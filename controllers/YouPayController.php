@@ -29,16 +29,29 @@ class YouPayController {
         $loader->add_action( 'init', $this,
             'register_shortcodes', 10 );
 
-        $loader->add_filter( 'woocommerce_short_description', $this, 
-            'youpay_text', 10, 1);
+        if ( ! empty($this->youpay->settings['woocommerce']['product-pages-hook']) ) {
+            $priority = (int) $this->youpay->settings['woocommerce']['product-pages-priority'];
+            if ( empty($priority) ) {
+                $priority = 10;
+            }
+            if ( (bool) $this->youpay->settings['woocommerce']['show-info-on-product-pages'] ) {
+                $loader->add_filter( $this->youpay->settings['woocommerce']['product-pages-hook'], $this,
+                'youpay_text', $priority, 1 );
+            }
+        }
     }
 
+    /**
+     * YouPay Text
+     *
+     * @param $desc
+     * @return string
+     */
     public function youpay_text($desc) {
-        if($this->youpay->settings['woocommerce']['show_on_product_page']) {
-            return do_shortcode('[youpay-popup product="true"]') . "<br/>" . $desc;
-        }else{
-            return $desc;
+        if ($this->youpay->settings['woocommerce']['show-info-on-product-pages']) {
+            return do_shortcode($this->youpay->settings['woocommerce']['product-pages-info-text']) . $desc;
         }
+        return $desc;
     }
 
     /**
@@ -47,9 +60,6 @@ class YouPayController {
     public function register_shortcodes() {
         add_shortcode('youpay-popup', array($this, 'youpay_popup'));
         add_shortcode('youpay-success', array($this, 'youpay_success'));
-
-//        wp_register_script( 'youpay-popup',
-//            $this->youpay->api->api_url . '/js/popup.js', array(), '1.0.0', 'all' );
     }
 
     /**

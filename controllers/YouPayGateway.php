@@ -27,8 +27,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$this->setup_properties();
 
 		// Load the settings.
-		$this->init_form_fields();
-		$this->init_settings();
+        include YOUPAY_PLUGIN_PATH . 'resources/views/form-fields.php';
+
+        $this->init_settings();
 	}
 
 	/**
@@ -133,13 +134,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
         }
 
     }
-
-	/**
-	 * Initialise Gateway Settings Form Fields.
-	 */
-	public function init_form_fields() {
-        include YOUPAY_PLUGIN_PATH . 'resources/views/form_fields.php';
-	}
 
 	/**
 	 * Process the payment and return the result.
