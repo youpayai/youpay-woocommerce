@@ -49,7 +49,7 @@ class YouPayController {
      */
     public function youpay_text($desc) {
         if ($this->youpay->settings['woocommerce']['show-info-on-product-pages']) {
-            return do_shortcode($this->youpay->settings['woocommerce']['product-pages-info-text']) . $desc;
+            echo do_shortcode($this->youpay->settings['woocommerce']['product-pages-info-text']);
         }
         return $desc;
     }
@@ -69,14 +69,14 @@ class YouPayController {
      */
     public function youpay_popup ( $atts ) {
         extract(shortcode_atts(array(
-            'product' => false,
+            'short' => false,
         ), $atts));
 
         $script = '<script src="' . $this->youpay->api->api_url . 'popup.js?version=' . time() . '"></script>';
-        if ( empty ($product)) {
-            return '<div id="youpay-popup" data-x="x"></div>' . $script;
+        if ( empty ($short)) {
+            return '<div id="youpay-popup"></div>' . $script;
         }
-        return '<div id="youpay-popup" data-full="true"></div>' . $script;
+        return '<div id="youpay-popup" data-short="true"></div>' . $script;
     }
 
     /**

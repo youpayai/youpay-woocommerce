@@ -30,7 +30,7 @@ $this->form_fields = array(
     'presentational-customisation-title' => array(
         'title'				=> __( 'Customisation', 'woo_youpay' ),
         'type'				=> 'title',
-        'description'		=> __( 'Please feel free to customise the presentation of the YouPay elements below to suit the individual needs of your web store.</p><p><em>Please talk to development team for all advanced customisations. <a id="reset-to-default-link" style="cursor:pointer;text-decoration:underline;">Restore Defaults</a></em>', 'woo_youpay' )
+        'description'		=> __( 'Please feel free to customise the presentation of the YouPay elements below to suit the individual needs of your web store.</p><p><em>Please talk to development team for all advanced customisations. ' /*<a id="reset-to-default-link" style="cursor:pointer;text-decoration:underline;">Restore Defaults</a></em>'*/, 'woo_youpay' )
     ),
 
     'redirect_url' => array(

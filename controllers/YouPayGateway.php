@@ -101,8 +101,12 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Setup general properties for the gateway.
 	 */
 	protected function setup_properties() {
+		$title = 'YouPay';
+		if ( ! empty($this->youpay->settings['woocommerce']['title']) ) {
+            $title = $this->youpay->settings['woocommerce']['title'];
+        }
+		$this->title              = $title;
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->title              = 'YouPay';
 		$this->description        = __( 'Send a YouPay link to someone else to pay for you. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
