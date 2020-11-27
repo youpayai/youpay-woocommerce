@@ -115,6 +115,37 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	}
 
     /**
+     * Generate WYSIWYG input field. This is a pseudo-magic method, called for each form field with a type of "wysiwyg".
+     *
+     * @since	2.0.0
+     * @see		WC_Settings_API::generate_settings_html()	For where this method is called from.
+     * @param	mixed		$key
+     * @param	mixed		$data
+     * @uses	esc_attr()									Available in WordPress core since 2.8.0.
+     * @uses	wp_editor()									Available in WordPress core since 3.3.0.
+     * @return	string										The HTML for the table row containing the WYSIWYG input field.
+     */
+    public function generate_wysiwyg_html($key, $data) {
+        $html = '';
+
+        $id = str_replace('-', '', $key);
+        $class = array_key_exists('class', $data) ? $data['class'] : '';
+        $css = array_key_exists('css', $data) ? ('<style>' . $data['css'] . '</style>') : '';
+        $name = "{$this->plugin_id}{$this->id}_{$key}";
+        $title = array_key_exists('title', $data) ? $data['title'] : '';
+        $value = array_key_exists($key, $this->settings) ? esc_attr( $this->settings[$key] ) : '';
+        $description = array_key_exists('description', $data) ? $data['description'] : '';
+
+        ob_start();
+
+        include YOUPAY_PLUGIN_PATH . '/resources/views/wysiwyg.html.php';
+
+        $html = ob_get_clean();
+
+        return $html;
+    }
+
+    /**
      * Output the gateway settings screen.
      */
     public function admin_options() {

@@ -34,11 +34,34 @@ class YouPayController {
             if ( empty($priority) ) {
                 $priority = 10;
             }
-            if ( (bool) $this->youpay->settings['woocommerce']['show-info-on-product-pages'] ) {
+            if ( $this->youpay->settings['woocommerce']['show-info-on-product-pages'] === true || $this->youpay->settings['woocommerce']['show-info-on-product-pages'] === 'yes' ) {
                 $loader->add_filter( $this->youpay->settings['woocommerce']['product-pages-hook'], $this,
                 'youpay_text', $priority, 1 );
             }
         }
+
+        if ( !empty($this->youpay->settings['woocommerce']['show-info-on-cart-page']) &&  (
+            $this->youpay->settings['woocommerce']['show-info-on-cart-page'] === true || $this->youpay->settings['woocommerce']['show-info-on-cart-page'] === 'yes'
+            )
+        ) {
+
+            $loader->add_action( 'woocommerce_cart_totals_after_order_total', $this,
+                'show_text_on_cart_page', 10, 0 );
+        }
+
+    }
+
+    public function show_text_on_cart_page()
+    {
+        if (empty($this->youpay->settings['woocommerce']['cart-page-info-text'])) {
+            return;
+        }
+
+        $html = $this->youpay->settings['woocommerce']['cart-page-info-text'];
+        $html = do_shortcode( $html );
+
+        # Allow other plugins to maniplulate or replace the HTML echoed by this funtion.
+        echo apply_filters( 'youpay_html_on_cart_page', $html );
     }
 
     /**

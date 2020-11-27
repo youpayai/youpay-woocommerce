@@ -65,4 +65,17 @@ $this->form_fields = array(
         'default'			=> 15,
         'description'		=> __( 'Set the hook priority to be used for Payment Info on Individual Product Pages.', 'woo_youpay' )
     ),
+
+    'show-info-on-cart-page' => array(
+        'title'				=> __( 'Display YouPay on Cart Page', 'woo_youpay' ),
+        'label'				=> __( 'Enable', 'woo_youpay' ),
+        'type'				=> 'checkbox',
+        'description'		=> __( 'Enable to display the YouPay message on the cart page', 'woo_youpay' ),
+        'default'			=> 'yes'
+    ),
+    'cart-page-info-text' => array(
+        'type'				=> 'textarea',
+        'default'			=> '[youpay-popup]',
+        'description'		=> __( 'Use [youpay-popup] for the default YouPay message.', 'woo_youpay' )
+    ),
 );
