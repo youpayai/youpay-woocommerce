@@ -24,12 +24,12 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	public function __construct() {
 		$this->youpay = new Startup();
 		// Setup general properties.
-		$this->show_all_billing_fields = $this->get_option( 'show_all_billing_fields' );
 		$this->setup_properties();
 
 		// Load the settings.
-		$this->init_form_fields();
-		$this->init_settings();
+        include YOUPAY_PLUGIN_PATH . 'resources/views/form-fields.php';
+
+        $this->init_settings();
 	}
 
 	/**
@@ -101,14 +101,49 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Setup general properties for the gateway.
 	 */
 	protected function setup_properties() {
+		$title = 'YouPay';
+		if ( ! empty($this->youpay->settings['woocommerce']['title']) ) {
+            $title = $this->youpay->settings['woocommerce']['title'];
+        }
+		$this->title              = $title;
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->title              = 'YouPay';
 		$this->description        = __( 'Send a YouPay link to someone else to pay for you. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
 		$this->icon               = YOUPAY_RESOURCE_ROOT .'/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
 	}
+
+    /**
+     * Generate WYSIWYG input field. This is a pseudo-magic method, called for each form field with a type of "wysiwyg".
+     *
+     * @since	2.0.0
+     * @see		WC_Settings_API::generate_settings_html()	For where this method is called from.
+     * @param	mixed		$key
+     * @param	mixed		$data
+     * @uses	esc_attr()									Available in WordPress core since 2.8.0.
+     * @uses	wp_editor()									Available in WordPress core since 3.3.0.
+     * @return	string										The HTML for the table row containing the WYSIWYG input field.
+     */
+    public function generate_wysiwyg_html($key, $data) {
+        $html = '';
+
+        $id = str_replace('-', '', $key);
+        $class = array_key_exists('class', $data) ? $data['class'] : '';
+        $css = array_key_exists('css', $data) ? ('<style>' . $data['css'] . '</style>') : '';
+        $name = "{$this->plugin_id}{$this->id}_{$key}";
+        $title = array_key_exists('title', $data) ? $data['title'] : '';
+        $value = array_key_exists($key, $this->settings) ? esc_attr( $this->settings[$key] ) : '';
+        $description = array_key_exists('description', $data) ? $data['description'] : '';
+
+        ob_start();
+
+        include YOUPAY_PLUGIN_PATH . '/resources/views/wysiwyg.html.php';
+
+        $html = ob_get_clean();
+
+        return $html;
+    }
 
     /**
      * Output the gateway settings screen.
@@ -134,42 +169,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
         }
 
     }
-
-	/**
-	 * Initialise Gateway Settings Form Fields.
-	 */
-	public function init_form_fields() {
-		$this->form_fields = array(
-			'enabled' => array(
-				'title'       => __( 'Enable/Disable', 'woocommerce' ),
-				'label'       => __( 'Enable YouPay', 'youpay' ),
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-			'show_all_billing_fields' => array(
-				'title'       => __( 'Show all billing fields', 'youpay' ),
-				'label'       => '',
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-			'redirect_url'            => array(
-				'title'       => __( 'Redirect after payment url', 'woocommerce' ),
-				'label'       => 'Redirect after payment url',
-				'type'        => 'text',
-				'description' => '',
-				'default'     => '',
-			),
-			'show_on_product_page' => array(
-				'title'       => __( 'Show YouPay text on product page', 'youpay' ),
-				'label'       => '',
-				'type'        => 'checkbox',
-				'description' => '',
-				'default'     => 'no',
-			),
-		);
-	}
 
 	/**
 	 * Process the payment and return the result.
