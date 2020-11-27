@@ -71,7 +71,7 @@ class YouPayController {
      * @return string
      */
     public function youpay_text($desc) {
-        if ($this->youpay->settings['woocommerce']['show-info-on-product-pages']) {
+        if (is_product() && $this->youpay->settings['woocommerce']['show-info-on-product-pages']) {
             echo do_shortcode($this->youpay->settings['woocommerce']['product-pages-info-text']);
         }
         return $desc;
