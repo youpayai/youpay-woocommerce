@@ -61,29 +61,26 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_available() {
-	    // Always Return false if its disabled
-	    if ( ! parent::is_available()) {
+	    if ( ! parent::is_available() || ! $this->youpay->has_api_keys) {
 	        return false;
         }
-	    // Check we have
-		if ( ! $this->youpay->has_api_keys ) {
-		    return false;
+
+        if ( ! empty($this->youpay->settings['has_payment_gateways']) ) {
+            return true;
         }
-        if ( empty($this->youpay->settings['has_payment_gateways']) ) {
-            try {
-                $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
-            } catch (\Exception $exception) {
-                return false;
-            }
-            if ( empty($store) || empty($store->payment_gateways) ) {
-                return false;
-            } else {
-                $this->youpay->update_settings(array(
-                    'has_payment_gateways' => true
-                ));
-            }
+
+        try {
+            $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
+        } catch (\Exception $exception) { }
+
+        if ( ! empty($store) && ! empty($store->payment_gateways) ) {
+            $this->youpay->update_settings(array(
+                'has_payment_gateways' => true
+            ));
+            return true;
         }
-        return true;
+
+        return false;
 	}
 
 	/**
