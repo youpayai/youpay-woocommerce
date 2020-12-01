@@ -238,7 +238,8 @@ class Startup {
         update_option(
             'woocommerce_' . self::$plugin_slug_static . '_settings',
             array(
-                'redirect_url' => get_permalink($post_id)
+                'redirect_url' => get_permalink($post_id),
+                'product-pages-info-text' => '[youpay-popup]',
             )
         );
 	}
