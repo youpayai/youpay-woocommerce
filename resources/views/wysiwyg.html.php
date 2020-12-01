@@ -15,7 +15,7 @@
         <fieldset>
             <?php if (!empty($title)): ?>
                 <legend class="screen-reader-text">
-                    <span><?php _e( $title, 'woo_afterpay' ); ?></span>
+                    <span><?php _e( $title, 'woo_youpay' ); ?></span>
                 </legend>
             <?php endif; ?>
             <?php
@@ -27,7 +27,7 @@
                 'textarea_rows' => 8
             ));
             ?>
-            <p class="description"><?php _e( $description, 'woo_afterpay' ); ?></p>
+            <p class="description"><?php _e( $description, 'woo_youpay' ); ?></p>
         </fieldset>
     </td>
 </tr>
