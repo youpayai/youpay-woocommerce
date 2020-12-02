@@ -45,7 +45,7 @@ class YouPayController {
             )
         ) {
 
-            $loader->add_action( 'woocommerce_cart_totals_after_order_total', $this,
+            $loader->add_action( 'woocommerce_widget_shopping_cart_before_buttons', $this,
                 'show_text_on_cart_page', 10, 0 );
         }
 
