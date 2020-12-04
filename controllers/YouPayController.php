@@ -22,12 +22,15 @@ class YouPayController {
 	    // This breaks functionality.
 //        $loader->add_filter( 'woocommerce_get_order_address', $this,
 //            'get_order_address_filter', 20, 3 );
+        $loader->add_action( 'init', $this,
+            'register_shortcodes', 10 );
+
+        if ( empty($this->youpay->settings['woocommerce']['enabled']) || $this->youpay->settings['woocommerce']['enabled'] !== 'yes' ) {
+            return;
+        }
 
         $loader->add_action( 'add_meta_boxes', $this,
             'mv_add_meta_boxes', 20, 2 );
-
-        $loader->add_action( 'init', $this,
-            'register_shortcodes', 10 );
 
         if ( ! empty($this->youpay->settings['woocommerce']['product-pages-hook']) ) {
             $priority = (int) $this->youpay->settings['woocommerce']['product-pages-priority'];
