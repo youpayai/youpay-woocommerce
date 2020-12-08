@@ -1,6 +1,6 @@
 <?php
 /**
- * Afterpay WooCommerce Plugin WYSIWYG Class
+ * YouPay WooCommerce Plugin WYSIWYG Class
  */
 ?>
 <tr valign="top">
