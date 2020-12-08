@@ -7,7 +7,7 @@
     <th scope="row" class="titledesc">
         <?php if (!empty($title)): ?>
             <label for="<?php echo $id; ?>">
-                <?php _e( $title, 'woo_afterpay' ); ?>
+                <?php _e( $title, 'woo_youpay' ); ?>
             </label>'
         <?php endif; ?>
     </th>
