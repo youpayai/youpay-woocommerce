@@ -103,8 +103,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		}
 		$this->title              = $title;
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->description        = __( 'Share a YouPay link with someone & let them pay for your order. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
-		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
+		$this->description        = __( 'Share a YouPay link with someone & let them pay for your order.<br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
+		$this->method_description = __( 'Share a YouPay link with someone & let them pay for your order.', 'youpay' );
 		$this->id                 = 'youpay';
 		$this->icon               = YOUPAY_RESOURCE_ROOT . '/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
