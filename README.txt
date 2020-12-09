@@ -13,7 +13,7 @@ YouPay is a new payment option at the checkout, allowing your customers to secur
 
 The external payer will be presented with your chosen payment options (e.g. PayPal and/or Stripe) meaning the funds for the payment are securely transferred to you using your regular payment methods.
 
-YouPay is completely is free for both the recipient customer and their chosen payer. YouPay does not charge you, the store owner, any additional fees. Store owners pay their regular payment gateway fees when a payment is made.
+YouPay is completely free for both the recipient customer and their chosen payer. YouPay does not charge you, the store owner, any additional fees. Store owners pay their regular payment gateway fees when a payment is made.
 
 Upon payment, the order is flagged as paid, allowing you to ship the product to the recipient customer.
 
