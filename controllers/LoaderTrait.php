@@ -18,18 +18,24 @@ trait LoaderTrait {
 	protected $youpay;
 
 	/**
+	 * Plugin Slug
+	 *
 	 * @var string $plugin_slug The Plugin Slug.
 	 * @deprecated
 	 */
-    protected $plugin_slug;
+	protected $plugin_slug;
 
 	/**
+	 * Plugin Version Number
+	 *
 	 * @var string The plugin version.
 	 * @deprecated
 	 */
 	protected $version;
 
 	/**
+	 * Plugin Settings
+	 *
 	 * @var array The Plugin Settings.
 	 * @deprecated
 	 */
@@ -46,7 +52,7 @@ trait LoaderTrait {
 
 		/**
 		 * Legacy Code.
-         * TODO: Cleanup, I think something weird needs these still
+		 * TODO: Cleanup, I think something weird needs these still
 		 */
 		$this->plugin_settings = $youpay->settings;
 		$this->plugin_slug     = $youpay->plugin_slug;

@@ -1,5 +1,5 @@
 === YouPay for WooCommerce ===
-Contributors: claraleigh, bmett
+Contributors: claraleigh, bmett, mattholmeyoupay
 Requires at least: 5.0
 Tested up to: 5.5.3
 Requires PHP: 5.6

@@ -9,16 +9,16 @@ use YouPaySDK\OrderItem;
  *
  * Provides a Cash on Delivery Payment Gateway.
  *
- * @class	 YouPayGateway
- * @extends	 WC_Payment_Gateway
- * @version	 1.0.0
- * @package	 WooYouPay/controllers
+ * @class    YouPayGateway
+ * @extends  WC_Payment_Gateway
+ * @version  1.0.0
+ * @package  WooYouPay/controllers
  */
 class YouPayGateway extends \WC_Payment_Gateway {
 
 	use LoaderTrait;
 
-    /**
+	/**
 	 * Constructor for the gateway.
 	 */
 	public function __construct() {
@@ -27,9 +27,9 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		$this->setup_properties();
 
 		// Load the settings.
-        include YOUPAY_PLUGIN_PATH . 'resources/views/form-fields.php';
+		include YOUPAY_PLUGIN_PATH . 'resources/views/form-fields.php';
 
-        $this->init_settings();
+		$this->init_settings();
 	}
 
 	/**
@@ -38,17 +38,12 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param \WooYouPay\bootstrap\Loader $loader
 	 */
 	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
-	    // Actions
-            //$loader->add_action( 'woocommerce_before_thankyou', $this,
-            //'thankyou_page', 10, 1 );
 	     $loader->add_action( 'woocommerce_thankyou_' . $this->id, $this,
             'thankyou_page', 10, 1 );
 		$loader->add_action( 'woocommerce_email_before_order_table', $this,
             'email_instructions', 10, 3 );
 		$loader->add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, $this,
             'process_admin_options', 10 );
-
-		// Filters
 		$loader->add_filter( 'woocommerce_payment_complete_order_status', $this,
             'change_payment_complete_order_status', 10, 3 );
 		$loader->add_filter( 'woocommerce_payment_gateways', $this,
@@ -61,26 +56,30 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_available() {
-	    if ( ! parent::is_available() || ! $this->youpay->has_api_keys) {
-	        return false;
-        }
+		if ( ! parent::is_available() || ! $this->youpay->has_api_keys ) {
+			return false;
+		}
 
-        if ( ! empty($this->youpay->settings['has_payment_gateways']) ) {
-            return true;
-        }
+		if ( ! empty( $this->youpay->settings['has_payment_gateways'] ) ) {
+			return true;
+		}
 
-        try {
-            $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
-        } catch (\Exception $exception) { }
+		try {
+			$store = $this->youpay->api->getStore( $this->youpay->settings['keys']->store_id );
+		} catch ( \Exception $exception ) {
+			// Left Blank.
+		}
 
-        if ( ! empty($store) && ! empty($store->payment_gateways) ) {
-            $this->youpay->update_settings(array(
-                'has_payment_gateways' => true
-            ));
-            return true;
-        }
+		if ( ! empty( $store ) && ! empty( $store->payment_gateways ) ) {
+			$this->youpay->update_settings(
+				array(
+					'has_payment_gateways' => true,
+				)
+			);
+			return true;
+		}
 
-        return false;
+		return false;
 	}
 
 	/**
@@ -99,73 +98,75 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	protected function setup_properties() {
 		$title = 'YouPay';
-		if ( ! empty($this->youpay->settings['woocommerce']['title']) ) {
-            $title = $this->youpay->settings['woocommerce']['title'];
-        }
+		if ( ! empty( $this->youpay->settings['woocommerce']['title'] ) ) {
+			$title = $this->youpay->settings['woocommerce']['title'];
+		}
 		$this->title              = $title;
 		$this->method_title       = __( 'YouPay', 'youpay' );
 		$this->description        = __( 'Send a YouPay link to someone else to pay for you. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
-		$this->icon               = YOUPAY_RESOURCE_ROOT .'/images/youpay-logo-dark-100.png';
+		$this->icon               = YOUPAY_RESOURCE_ROOT . '/images/youpay-logo-dark-100.png';
 		$this->has_fields         = false;
 	}
 
-    /**
-     * Generate WYSIWYG input field. This is a pseudo-magic method, called for each form field with a type of "wysiwyg".
-     *
-     * @since	2.0.0
-     * @see		WC_Settings_API::generate_settings_html()	For where this method is called from.
-     * @param	mixed		$key
-     * @param	mixed		$data
-     * @uses	esc_attr()									Available in WordPress core since 2.8.0.
-     * @uses	wp_editor()									Available in WordPress core since 3.3.0.
-     * @return	string										The HTML for the table row containing the WYSIWYG input field.
-     */
-    public function generate_wysiwyg_html($key, $data) {
-        $html = '';
+	/**
+	 * Generate WYSIWYG input field. This is a pseudo-magic method, called for each form field with a type of "wysiwyg".
+	 *
+	 * @since   2.0.0
+	 * @see     WC_Settings_API::generate_settings_html()   For where this method is called from.
+	 * @param   mixed $key
+	 * @param   mixed $data
+	 * @uses    esc_attr()                                  Available in WordPress core since 2.8.0.
+	 * @uses    wp_editor()                                 Available in WordPress core since 3.3.0.
+	 * @return  string                                      The HTML for the table row containing the WYSIWYG input field.
+	 */
+	public function generate_wysiwyg_html( $key, $data ) {
+		$html = '';
 
-        $id = str_replace('-', '', $key);
-        $class = array_key_exists('class', $data) ? $data['class'] : '';
-        $css = array_key_exists('css', $data) ? ('<style>' . $data['css'] . '</style>') : '';
-        $name = "{$this->plugin_id}{$this->id}_{$key}";
-        $title = array_key_exists('title', $data) ? $data['title'] : '';
-        $value = array_key_exists($key, $this->settings) ? esc_attr( $this->settings[$key] ) : '';
-        $description = array_key_exists('description', $data) ? $data['description'] : '';
+		$id          = str_replace( '-', '', $key );
+		$class       = array_key_exists( 'class', $data ) ? $data['class'] : '';
+		$css         = array_key_exists( 'css', $data ) ? ( '<style>' . $data['css'] . '</style>' ) : '';
+		$name        = "{$this->plugin_id}{$this->id}_{$key}";
+		$title       = array_key_exists( 'title', $data ) ? $data['title'] : '';
+		$value       = array_key_exists( $key, $this->settings ) ? esc_attr( $this->settings[ $key ] ) : '';
+		$description = array_key_exists( 'description', $data ) ? $data['description'] : '';
 
-        ob_start();
+		ob_start();
 
-        include YOUPAY_PLUGIN_PATH . '/resources/views/wysiwyg.html.php';
+		include YOUPAY_PLUGIN_PATH . '/resources/views/wysiwyg.html.php';
 
-        $html = ob_get_clean();
+		$html = ob_get_clean();
 
-        return $html;
-    }
+		return $html;
+	}
 
-    /**
-     * Output the gateway settings screen.
-     */
-    public function admin_options() {
-        parent::admin_options();
-        if (empty($this->youpay->settings['has_payment_gateways'])) {
-            try {
-                $store = $this->youpay->api->getStore($this->youpay->settings['keys']->store_id);
-                if (empty($store->payment_gateways)) {
-                    $url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$store->id}&viaRelationship=payment_gateways";
-                    echo "<div class='error'><p><strong>No Payment Gateway setup on YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
-                    echo "<span style='color:#f00'>WARNING: NO PAYMENT GATEWAY HAS BEEN SETUP.</span><br>";
-                    echo "<a href='$url' target='_blank'>Click here to add a Payment Gateway</a>";
-                } else {
-                    $this->youpay->update_settings([
-                        'has_payment_gateways' => true
-                    ]);
-                }
-            } catch (\Exception $exception) {
-                echo "<div class='error'><p><strong>Error contacting YouPay, please try re-installing.</strong></p></div>";
-            }
-        }
+	/**
+	 * Output the gateway settings screen.
+	 */
+	public function admin_options() {
+		parent::admin_options();
+		if ( empty( $this->youpay->settings['has_payment_gateways'] ) ) {
+			try {
+				$store = $this->youpay->api->getStore( $this->youpay->settings['keys']->store_id );
+				if ( empty( $store->payment_gateways ) ) {
+					$url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$store->id}&viaRelationship=payment_gateways";
+					echo "<div class='error'><p><strong>No Payment Gateway setup on YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
+					echo "<span style='color:#f00'>WARNING: NO PAYMENT GATEWAY HAS BEEN SETUP.</span><br>";
+					echo "<a href='$url' target='_blank'>Click here to add a Payment Gateway</a>";
+				} else {
+					$this->youpay->update_settings(
+						array(
+							'has_payment_gateways' => true,
+						)
+					);
+				}
+			} catch ( \Exception $exception ) {
+				echo "<div class='error'><p><strong>Error contacting YouPay, please try re-installing.</strong></p></div>";
+			}
+		}
 
-    }
+	}
 
 	/**
 	 * Process the payment and return the result.
@@ -200,8 +201,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 			);
 		}
 
-		$total = (float) $order->get_total();
-		$subtotal = (float) $order->get_subtotal();
+		$total      = (float) $order->get_total();
+		$subtotal   = (float) $order->get_subtotal();
 		$extra_fees = $total - $subtotal;
 
 		try {
@@ -226,8 +227,8 @@ class YouPayGateway extends \WC_Payment_Gateway {
 					),
 				)
 			);
-		} catch (\Exception $exception) {
-		    // TODO: handle error gracefully
+		} catch ( \Exception $exception ) {
+			// TODO: handle error gracefully.
 			throw $exception;
 		}
 
@@ -243,26 +244,11 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		// Remove cart.
 		WC()->cart->empty_cart();
 
-
 		// Return thankyou redirect.
 		return array(
 			'result'   => 'success',
 			'redirect' => $this->get_return_url( $order ),
 		);
-	}
-
-	function redirect_after_purchase() {
-		global $wp;
-		if ( is_checkout() && !empty( $wp->query_vars['order-received'] ) && empty($_GET['test']) ) {
-			$order_id = $wp->query_vars['order-received'];
-			$youpay_order = wc_get_order( $order_id );
-			if ($youpay_order && $url = $youpay_order->get_meta( 'youpay_url', true )) {
-				$youpay_link  = 'https://youpay.link/share/' . $youpay_order->get_meta( 'youpay_url' );
-				wp_redirect( $youpay_link );
-				exit;
-			}
-
-		}
 	}
 
 	/**
@@ -271,13 +257,13 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * @param mixed $order_id Order ID.
 	 */
 	public function thankyou_page( $order_id ) {
-        $youpay_order = wc_get_order( $order_id );
-        $recipient_name = $youpay_order->get_billing_first_name();
-        $youpay_order_id  = $youpay_order->get_meta( 'youpay_order_id' );
-        if ( empty($youpay_order_id) ) {
-            return;
-        }
-	    $youpay_js = $this->youpay->api->getCheckoutJSUrl();
+		$youpay_order    = wc_get_order( $order_id );
+		$recipient_name  = $youpay_order->get_billing_first_name();
+		$youpay_order_id = $youpay_order->get_meta( 'youpay_order_id' );
+		if ( empty( $youpay_order_id ) ) {
+			return;
+		}
+		$youpay_js = $this->youpay->api->getCheckoutJSUrl();
 		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
 
@@ -308,6 +294,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		if ( $sent_to_admin || $this->id !== $order->get_payment_method() ) {
 			return;
 		}
-		echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
+//		echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
 	}
 }

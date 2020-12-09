@@ -24,15 +24,26 @@ class Startup {
 	 */
 	protected $controllers = array(
 		AdminController::class,
-        ProcessPayment::class,
-        YouPayController::class,
-		// Delayed Controllers, so that it is included after all other plugins
+		ProcessPayment::class,
+		YouPayController::class,
+		// Delayed Controllers, so that it is included after all other plugins.
 		'delay' => array(
 			YouPayGateway::class,
 		),
 	);
 
+	/**
+	 * Plugin Slug - Static
+	 *
+	 * @var string
+	 */
 	public static $plugin_slug_static = 'youpay';
+
+	/**
+	 * Plugin Slug
+	 *
+	 * @var string
+	 */
 	public $plugin_slug;
 
 	/**
@@ -47,7 +58,7 @@ class Startup {
 	 * The current version of the plugin.
 	 *
 	 * @access   protected
-	 * @var	  string	$version	The current version of the plugin.
+	 * @var   string    $version    The current version of the plugin.
 	 */
 	public $version;
 
@@ -65,12 +76,12 @@ class Startup {
 	 */
 	public $api;
 
-    /**
-     * Has Api Keys
-     *
-     * @var bool
-     */
-    public $has_api_keys;
+	/**
+	 * Has Api Keys
+	 *
+	 * @var bool
+	 */
+	public $has_api_keys;
 
 	/**
 	 * The Resource Root
@@ -88,12 +99,12 @@ class Startup {
 	 */
 	public function __construct() {
 
-        if ( ! defined( 'YOUPAY_RESOURCE_ROOT' ) ) {
-            define('YOUPAY_RESOURCE_ROOT', plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' ));
-        }
+		if ( ! defined( 'YOUPAY_RESOURCE_ROOT' ) ) {
+			define( 'YOUPAY_RESOURCE_ROOT', plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' ) );
+		}
 
-		$this->plugin_slug   = self::$plugin_slug_static;
-		$this->settings      = get_option( $this->plugin_slug . '_settings', array() );
+		$this->plugin_slug             = self::$plugin_slug_static;
+		$this->settings                = get_option( $this->plugin_slug . '_settings', array() );
 		$this->settings['woocommerce'] = get_option( 'woocommerce_' . $this->plugin_slug . '_settings', array() );
 
 		$this->version       = YOUPAY_VERSION;
@@ -104,11 +115,11 @@ class Startup {
 		// Setup Client Keys.
 		if ( ! empty( $this->settings['keys'] ) ) {
 			$keys = $this->settings['keys'];
-			if ( ! empty($keys->access_token) && ! empty($keys->store_id)) {
-			    $this->api->setToken( $keys->access_token );
-                $this->api->setStoreID( $keys->store_id );
-                $this->has_api_keys = true;
-            }
+			if ( ! empty( $keys->access_token ) && ! empty( $keys->store_id ) ) {
+				$this->api->setToken( $keys->access_token );
+				$this->api->setStoreID( $keys->store_id );
+				$this->has_api_keys = true;
+			}
 		}
 	}
 
@@ -123,16 +134,16 @@ class Startup {
 	 * Load the controllers
 	 */
 	public function sort_controllers() {
-	    // Delay Certain Controllers due to WooComm
-        $delayed = false;
-        if (! empty($this->controllers['delay'])) {
-            $delayed = $this->controllers['delay'];
-        }
+		// Delay Certain Controllers due to WooComm.
+		$delayed = false;
+		if ( ! empty( $this->controllers['delay'] ) ) {
+			$delayed = $this->controllers['delay'];
+		}
 		unset( $this->controllers['delay'] );
 
 		$this->load_controllers();
 
-		// Handle Delayed Controllers
+		// Handle Delayed Controllers.
 		if ( ! empty( $delayed ) ) {
 			$this->controllers = $delayed;
 			$this->loader->add_action( 'plugins_loaded', $this, 'load_delayed' );
@@ -151,17 +162,17 @@ class Startup {
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 *
-	 * @since	1.0.0
+	 * @since   1.0.0
 	 */
 	public static function run() {
 		$self = new self();
 		$self->sort_controllers();
 		$self->loader();
-        $self->loader->run();
-        // TODO: Add CLI Commands
-//		if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
-//			\WP_CLI::add_command( $self->plugin_slug, '\WooYouPay\controllers\CliController' );
-//		}
+		$self->loader->run();
+		// TODO: Add CLI Commands
+		// if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI' ) ) {
+		// \WP_CLI::add_command( $self->plugin_slug, '\WooYouPay\controllers\CliController' );
+		// }
 	}
 
 	/**
@@ -185,19 +196,19 @@ class Startup {
 		return $controller;
 	}
 
-    /**
-     * Redirect to login page logic
-     * TODO: Replace with banner message
-     */
+	/**
+	 * Redirect to login page logic
+	 * TODO: Replace with banner message
+	 */
 	public function plugin_redirect() {
-	    // if redirect var set (only exists on first redirect)
+		// if redirect var set (only exists on first redirect).
 		if ( ( ! empty( $this->settings['redirect'] ) ||
-                (
-                    // Redirect all other pages except plugin page
-                    (empty( $this->settings['keys'] ) || empty( $this->settings['keys']->access_token ) )
-                    && (strpos($_SERVER['REQUEST_URI'], 'plugins.php') === false) && $_SERVER['REQUEST_METHOD'] === 'GET'
-                )
-            ) && ! isset( $_GET['mylogin'] ) ) {
+				(
+					// Redirect all other pages except plugin page
+					( empty( $this->settings['keys'] ) || empty( $this->settings['keys']->access_token ) )
+					&& ( strpos( $_SERVER['REQUEST_URI'], 'plugins.php' ) === false ) && $_SERVER['REQUEST_METHOD'] === 'GET'
+				)
+			) && ! isset( $_GET['mylogin'] ) ) {
 			wp_redirect(
 				admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' )
 			);
@@ -218,37 +229,36 @@ class Startup {
 			@trigger_error( 'Please install Woocommerce before activating.', E_USER_ERROR );
 		}
 
-		// TODO: create page
-        $wordpress_page = array(
-            'post_title'    => 'YouPay Payment Processed',
-            'post_content'  => '[youpay-success]',
-            'post_status'   => 'publish',
-            'post_author'   => 1,
-            'post_type' => 'page'
-        );
-        $post_id = wp_insert_post( $wordpress_page );
+		$wordpress_page = array(
+			'post_title'   => 'YouPay Payment Processed',
+			'post_content' => '[youpay-success]',
+			'post_status'  => 'publish',
+			'post_author'  => 1,
+			'post_type'    => 'page',
+		);
+		$post_id        = wp_insert_post( $wordpress_page );
 
-        // TODO: check if settings already exist
-        update_option(
-            self::$plugin_slug_static . '_settings',
-            array(
-                'redirect' => true,
-            )
-        );
-        update_option(
-            'woocommerce_' . self::$plugin_slug_static . '_settings',
-            array(
-                'redirect_url' => get_permalink($post_id),
-                'product-pages-info-text' => '[youpay-popup]',
-            )
-        );
+		// TODO: check if settings already exist.
+		update_option(
+			self::$plugin_slug_static . '_settings',
+			array(
+				'redirect' => true,
+			)
+		);
+		update_option(
+			'woocommerce_' . self::$plugin_slug_static . '_settings',
+			array(
+				'redirect_url'            => get_permalink( $post_id ),
+				'product-pages-info-text' => '[youpay-popup]',
+			)
+		);
 	}
 
 	/**
 	 * Run on DeActivation
 	 */
 	public static function deactivate() {
-		delete_option(self::$plugin_slug_static . '_settings');
+		delete_option( self::$plugin_slug_static . '_settings' );
 	}
 
 	/**

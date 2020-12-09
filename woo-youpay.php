@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name:       YouPay for WooCommerce
  * Plugin URI:        http://youpay.link/
