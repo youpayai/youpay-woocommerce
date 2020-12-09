@@ -103,7 +103,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		}
 		$this->title              = $title;
 		$this->method_title       = __( 'YouPay', 'youpay' );
-		$this->description        = __( 'Send a YouPay link to someone else to pay for you. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
+		$this->description        = __( 'Share a YouPay link with someone & let them pay for your order. <br> When you click Place Order you will be given a secure YouPay link to share with your payer.', 'youpay' );
 		$this->method_description = __( 'Let someone else pay for you.', 'youpay' );
 		$this->id                 = 'youpay';
 		$this->icon               = YOUPAY_RESOURCE_ROOT . '/images/youpay-logo-dark-100.png';
@@ -147,7 +147,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	public function admin_options() {
 		parent::admin_options();
 		if ( empty( $this->youpay->has_api_keys ) ) {
-			$url = admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' );
+			$url = admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true' );
 			echo "<div class='error'><p><strong>You have not yet logged into YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
 			echo "<span style='color:#f00'>WARNING: YouPay has not yet been setup.</span><br>";
 			echo "<a href='$url' target='_blank'>Click here to login</a>";
