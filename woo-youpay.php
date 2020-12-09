@@ -20,6 +20,10 @@ if ( ! defined( 'YOUPAY_VERSION' ) ) {
 	define( 'YOUPAY_VERSION', '1.0.4' );
 }
 
+if ( ! defined( 'YOUPAY_BASENAME' ) ) {
+	define( 'YOUPAY_BASENAME', plugin_basename(__FILE__) );
+}
+
 if ( ! defined( 'YOUPAY_PLUGIN_PATH' ) ) {
 	define( 'YOUPAY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 }

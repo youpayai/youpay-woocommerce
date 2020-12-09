@@ -19,9 +19,9 @@ class YouPayController {
 	 * @param Loader $loader main loader var.
 	 */
 	public function loader( Loader $loader ) {
-        $loader->add_action( 'init', $this,
-            'register_shortcodes', 10 );
-
+		$loader->add_action( 'init', $this,'register_shortcodes' );
+		$loader->add_filter( 'plugin_action_links_' . YOUPAY_BASENAME, $this,'add_plugin_page_settings_link');
+//		plugin_basename
 		if ( empty( $this->youpay->settings['woocommerce']['enabled'] ) || 'yes' !== $this->youpay->settings['woocommerce']['enabled'] ) {
 			return;
 		}
@@ -49,6 +49,21 @@ class YouPayController {
                 'show_text_on_cart_page', 10, 0 );
 		}
 
+	}
+
+
+	/**
+	 * Add Plugin page settings link
+	 *
+	 * @param array $links Links for the plugin.
+	 *
+	 * @return mixed
+	 */
+	public function add_plugin_page_settings_link( $links ) {
+		$links[] = '<a href="' .
+		           admin_url( 'admin.php?page=wc-settings&tab=checkout&section=youpay' ) .
+		           '">' . __('Settings') . '</a>';
+		return $links;
 	}
 
 	/**
