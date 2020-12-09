@@ -146,6 +146,13 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 */
 	public function admin_options() {
 		parent::admin_options();
+		if ( empty( $this->youpay->has_api_keys ) ) {
+			$url = admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' );
+			echo "<div class='error'><p><strong>You have not yet logged into YouPay.</strong><br><a href='$url' target='_blank'>Click here to get started.</a></p></div>";
+			echo "<span style='color:#f00'>WARNING: YouPay has not yet been setup.</span><br>";
+			echo "<a href='$url' target='_blank'>Click here to login</a>";
+			return;
+		}
 		if ( empty( $this->youpay->settings['has_payment_gateways'] ) ) {
 			try {
 				$store = $this->youpay->api->getStore( $this->youpay->settings['keys']->store_id );

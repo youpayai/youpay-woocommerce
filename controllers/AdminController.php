@@ -85,7 +85,6 @@ class AdminController {
 
 		$this->youpay->update_settings(
 			array(
-				'redirect' => false,
 				'keys'     => $keys,
 			)
 		);

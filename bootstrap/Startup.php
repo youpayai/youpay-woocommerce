@@ -202,16 +202,16 @@ class Startup {
 	 */
 	public function plugin_redirect() {
 		// if redirect var set (only exists on first redirect).
-		if ( ( ! empty( $this->settings['redirect'] ) ||
-				(
-					// Redirect all other pages except plugin page
-					( empty( $this->settings['keys'] ) || empty( $this->settings['keys']->access_token ) )
-					&& ( strpos( $_SERVER['REQUEST_URI'], 'plugins.php' ) === false ) && $_SERVER['REQUEST_METHOD'] === 'GET'
+		if ( ! empty( $this->settings['redirect'] ) ) {
+			$this->update_settings(
+				array(
+					'redirect' => false,
 				)
-			) && ! isset( $_GET['mylogin'] ) ) {
+			);
 			wp_redirect(
 				admin_url( 'admin.php?page=' . $this->plugin_slug . '_login_page&mylogin=true' )
 			);
+			exit;
 		}
 	}
 
