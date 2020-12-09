@@ -21,11 +21,15 @@ YouPay recommends you keep the recipient customer and payer details private from
 
 Please visit the YouPay website for further information at https://youpay.ai.
 
-# Install Instructions
+= How does YouPay Work? =
+[youtube https://www.youtube.com/watch?v=O6IEmmz_t18]
+
+= Support and Feedback =
+Please visit https://support.youpay.ai for additional documentation or to contact us with feedback and support requests.
+
+== Installation ==
+
 1. Install and activate the YouPay plugin
 2. Login to the YouPay login screen you are redirected to using the same details you used when you first registered
 3. Follow the prompts to setup your Store and Payment Gateways
 4. Enable the YouPay payment method in Woocommerce
-
-#Support and Feedback
-Please visit https://support.youpay.ai for additional documentation or to contact us with feedback and support requests.
