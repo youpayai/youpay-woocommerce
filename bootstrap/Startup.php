@@ -98,7 +98,6 @@ class Startup {
 	 * the public-facing side of the site.
 	 */
 	public function __construct() {
-
 		if ( ! defined( 'YOUPAY_RESOURCE_ROOT' ) ) {
 			define( 'YOUPAY_RESOURCE_ROOT', plugins_url( '/resources/', YOUPAY_PLUGIN_PATH . 'woo-youpay.php' ) );
 		}
@@ -202,7 +201,11 @@ class Startup {
 	 */
 	public function plugin_redirect() {
 		// if redirect var set (only exists on first redirect).
-		if ( ! empty( $this->settings['redirect'] ) ) {
+		if (! empty($this->settings['redirect'])
+		      && (strpos($_SERVER['REQUEST_URI'], 'plugins.php') === false)
+		      && $_SERVER['REQUEST_METHOD'] === 'GET'
+		    && ! isset($_GET['mylogin'])
+		) {
 			$this->update_settings(
 				array(
 					'redirect' => false,

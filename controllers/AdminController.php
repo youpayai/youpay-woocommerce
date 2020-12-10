@@ -57,29 +57,29 @@ class AdminController {
 	 * Process YouPay Login via API
 	 */
 	public function process_form_data() {
-		$post = $_POST;
-		if ( empty( $post['email'] ) || empty( $post['password'] ) ) {
-			wp_redirect(
-				admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds' )
-			);
+		$error_url = admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds' );
+
+		if ( empty( $_POST['email'] ) || empty( $_POST['password'] )
+				|| ! isset( $_POST['_wpnonce'] )
+				|| ! wp_verify_nonce( $_POST['_wpnonce'], 'youpay-login' )
+		) {
+			wp_safe_redirect( $error_url );
 			exit;
 		}
 
-		$domain = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
+		$email    = sanitize_email( $_POST['email'] );
+		$password = $_POST['password'];
+		$domain   = str_replace( array( 'https://', 'http://', 'www.' ), '', site_url() );
 
 		try {
-			$keys = Client::auth( $post['email'], $post['password'], $domain, 'woocommerce' );
+			$keys = Client::auth( $email, $password, $domain, 'woocommerce' );
 		} catch ( \Exception $exception ) {
-			wp_redirect(
-				admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds' )
-			);
+			wp_safe_redirect( $error_url );
 			exit;
 		}
 
 		if ( $keys->status_code !== 200 ) {
-			wp_redirect(
-				admin_url( 'admin.php?page=' . $this->youpay->plugin_slug . '_login_page&mylogin=true&yperror=invalid_creds' )
-			);
+			wp_safe_redirect( $error_url );
 			exit;
 		}
 
@@ -102,9 +102,9 @@ class AdminController {
 			// left blank.
 		}
 		if ( empty( $store->payment_gateways ) ) {
-			$url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways&redirect_after=" . urlencode( $next_url );
-			wp_redirect( $url );
-			exit;
+//			$url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways&redirect_after=" . urlencode( $next_url );
+//			wp_redirect( $url );
+//			exit;
 		} else {
 			$this->youpay->update_settings(
 				array(

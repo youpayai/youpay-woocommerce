@@ -48,6 +48,15 @@ class YouPayGateway extends \WC_Payment_Gateway {
             'change_payment_complete_order_status', 10, 3 );
 		$loader->add_filter( 'woocommerce_payment_gateways', $this,
             'add_your_gateway_class', 20, 1 );
+
+		$loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
+	}
+
+	/**
+	 * Add Checkout Page Script
+	 */
+	public function enqueue_scripts() {
+		wp_enqueue_script( $this->youpay->plugin_slug . '-share', $this->youpay->api->getCheckoutJSUrl(), array(), $this->youpay->version, true );
 	}
 
 	/**
@@ -270,7 +279,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		if ( empty( $youpay_order_id ) ) {
 			return;
 		}
-		$youpay_js = $this->youpay->api->getCheckoutJSUrl();
 		require_once YOUPAY_PLUGIN_PATH . '/resources/views/thankyou-page.php';
 	}
 
