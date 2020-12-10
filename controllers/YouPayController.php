@@ -49,8 +49,17 @@ class YouPayController {
                 'show_text_on_cart_page', 10, 0 );
 		}
 
+		$loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
 
+	/**
+	 * Add Checkout Page Script
+	 */
+	public function enqueue_scripts() {
+		$url = $this->youpay->api->api_url . 'popup.js';
+
+		wp_enqueue_script( $this->youpay->plugin_slug . '-popup', $url, array(), $this->youpay->version, true );
+	}
 
 	/**
 	 * Add Plugin page settings link
@@ -118,11 +127,10 @@ class YouPayController {
 			)
 		);
 
-		$script = '<script src="' . $this->youpay->api->api_url . 'popup.js?version=' . time() . '"></script>';
 		if ( empty( $short ) ) {
-			return '<div id="youpay-popup"></div>' . $script;
+			return '<div id="youpay-popup"></div>';
 		}
-		return '<div id="youpay-popup" data-short="true"></div>' . $script;
+		return '<div id="youpay-popup" data-short="true"></div>';
 	}
 
 	/**

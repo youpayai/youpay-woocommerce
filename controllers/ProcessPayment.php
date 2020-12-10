@@ -31,7 +31,7 @@ class ProcessPayment {
 	 * @throws \WC_Data_Exception \Exception Thrown.
 	 */
 	public function payment_complete() {
-		$youpay_id = $_GET['youpay_id'];
+		$youpay_id = sanitize_text_field($_GET['youpay_id']);
 
 		$youpay_order = $this->youpay->api->getOrder( $youpay_id );
 
