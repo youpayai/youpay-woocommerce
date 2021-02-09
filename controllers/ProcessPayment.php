@@ -73,9 +73,40 @@ class ProcessPayment {
 	 * @throws \Exception Exception.
 	 */
 	public function sniff_requests() {
+		if ( ! empty( $_GET['youpay_status_updated'] ) ) {
+			$this->status_updated( $_GET['youpay_status_updated'] );
+			exit;
+		}
 		if ( ! empty( $_GET['youpay_id'] ) ) {
 			$this->payment_complete();
 			exit;
 		}
+	}
+
+	/**
+	 * Update Cancelled Order
+	 *
+	 * @param string $youpay_id YouPay Order ID.
+	 *
+	 * @throws \Exception
+	 */
+	public function status_updated( $youpay_id ) {
+		$youpay_id = sanitize_text_field( $youpay_id );
+
+		$youpay_order = $this->youpay->api->getOrder( $youpay_id );
+
+		// This shouldn't ever pass as true
+		if ( $youpay_order->status_id !== 0 ) {
+			throw new \Exception( 'Error, not cancelled.' );
+		}
+
+		$order_id = $youpay_order->store_order_id;
+		$order    = \wc_get_order( $order_id );
+
+		if ( $order->get_status() === 'cancelled' ) {
+			return;
+		}
+
+		$order->update_status( 'cancelled' , 'YouPay Order Cancelled' );
 	}
 }

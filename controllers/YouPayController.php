@@ -26,6 +26,9 @@ class YouPayController {
 			return;
 		}
 
+		$loader->add_action( 'woocommerce_order_status_cancelled', $this,
+			'order_cancelled', 20, 2 );
+
         $loader->add_action( 'add_meta_boxes', $this,
             'mv_add_meta_boxes', 20, 2 );
 
@@ -49,6 +52,22 @@ class YouPayController {
                 'show_text_on_cart_page', 10, 0 );
 		}
 		$loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
+	}
+
+	/**
+	 * Order Status Updated
+	 *
+	 * @param int $order_id Order ID.
+	 */
+	public function order_cancelled( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		$youpay_order_id = $order->get_meta( 'youpay_order_id' );
+		if ( empty( $youpay_order_id ) ) {
+			return;
+		}
+
+		$this->youpay->api->cancelOrder( $youpay_order_id );
 	}
 
 	/**
