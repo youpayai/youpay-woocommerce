@@ -91,22 +91,33 @@ class ProcessPayment {
 	 * @throws \Exception
 	 */
 	public function status_updated( $youpay_id ) {
-		$youpay_id = sanitize_text_field( $youpay_id );
-
+		$youpay_id    = sanitize_text_field( $youpay_id );
 		$youpay_order = $this->youpay->api->getOrder( $youpay_id );
+		$order_id     = $youpay_order->store_order_id;
+		$order        = \wc_get_order( $order_id );
 
-		// This shouldn't ever pass as true
-		if ( $youpay_order->status_id !== 0 ) {
-			throw new \Exception( 'Error, not cancelled.' );
-		}
+		echo 'status: ' . $youpay_order->status_id . ' -- ' . $youpay_order->updated_at;
 
-		$order_id = $youpay_order->store_order_id;
-		$order    = \wc_get_order( $order_id );
-
-		if ( $order->get_status() === 'cancelled' ) {
+		echo 'hoo';
+		// This shouldn't ever pass as true.
+		if ( $youpay_order->status_id ) {
+			echo 'x';
+			if ( $order->get_status() === 'on-hold' ) {
+				echo 'y';
+				return;
+			}
+			echo 'z';
+			$order->update_status( 'on-hold', __( 'Awaiting YouPay Payment.', 'youpay' ) );
 			return;
 		}
 
-		$order->update_status( 'cancelled' , 'YouPay Order Cancelled' );
+		echo '1';
+		if ( $order->get_status() === 'cancelled' ) {
+			echo '2';
+			return;
+		}
+		echo '3';
+
+		$order->update_status( 'cancelled', 'YouPay Order Cancelled' );
 	}
 }

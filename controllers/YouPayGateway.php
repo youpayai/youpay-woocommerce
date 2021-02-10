@@ -36,6 +36,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 	 * Load actions and filters
 	 *
 	 * @param \WooYouPay\bootstrap\Loader $loader
+	 * @codingStandardsIgnoreStart
 	 */
 	public function loader( \WooYouPay\bootstrap\Loader $loader ) {
 	     $loader->add_action( 'woocommerce_thankyou_' . $this->id, $this,
@@ -51,6 +52,7 @@ class YouPayGateway extends \WC_Payment_Gateway {
 
 		$loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
+	// @codingStandardsIgnoreEnd
 
 	/**
 	 * Add Checkout Page Script

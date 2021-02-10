@@ -17,17 +17,20 @@ class YouPayController {
 	 * loader
 	 *
 	 * @param Loader $loader main loader var.
+	 * @codingStandardsIgnoreStart
 	 */
 	public function loader( Loader $loader ) {
 		$loader->add_action( 'init', $this,'register_shortcodes' );
 		$loader->add_filter( 'plugin_action_links_' . YOUPAY_BASENAME, $this,'add_plugin_page_settings_link');
-//		plugin_basename
+
+		$loader->add_action( 'woocommerce_order_status_cancelled', $this,
+			'order_updated', 10, 1 );
+//		$loader->add_action( 'woocommerce_order_status_on-hold', $this,
+//			'order_updated', 10, 1 );
+
 		if ( empty( $this->youpay->settings['woocommerce']['enabled'] ) || 'yes' !== $this->youpay->settings['woocommerce']['enabled'] ) {
 			return;
 		}
-
-		$loader->add_action( 'woocommerce_order_status_cancelled', $this,
-			'order_cancelled', 20, 2 );
 
         $loader->add_action( 'add_meta_boxes', $this,
             'mv_add_meta_boxes', 20, 2 );
@@ -53,13 +56,14 @@ class YouPayController {
 		}
 		$loader->add_action( 'wp_enqueue_scripts', $this, 'enqueue_scripts' );
 	}
+	// @codingStandardsIgnoreEnd
 
 	/**
 	 * Order Status Updated
 	 *
 	 * @param int $order_id Order ID.
 	 */
-	public function order_cancelled( $order_id ) {
+	public function order_updated( $order_id ) {
 		$order = wc_get_order( $order_id );
 
 		$youpay_order_id = $order->get_meta( 'youpay_order_id' );
