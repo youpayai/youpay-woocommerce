@@ -232,14 +232,19 @@ class Startup {
 			@trigger_error( 'Please install Woocommerce before activating.', E_USER_ERROR );
 		}
 
-		$wordpress_page = array(
-			'post_title'   => 'YouPay Payment Processed',
-			'post_content' => '[youpay-success]',
-			'post_status'  => 'publish',
-			'post_author'  => 1,
-			'post_type'    => 'page',
-		);
-		$post_id        = wp_insert_post( $wordpress_page );
+		$page = get_page_by_path( 'youpay-payment-processed' );
+		if ( empty ( $page ) ) {
+			$wordpress_page = array(
+				'post_title'   => 'YouPay Payment Processed',
+				'post_content' => '[youpay-success]',
+				'post_status'  => 'publish',
+				'post_author'  => 1,
+				'post_type'    => 'page',
+			);
+			$post_id        = wp_insert_post( $wordpress_page );
+		} else {
+			$post_id = $page->ID;
+		}
 
 		// TODO: check if settings already exist.
 		update_option(
@@ -251,8 +256,16 @@ class Startup {
 		update_option(
 			'woocommerce_' . self::$plugin_slug_static . '_settings',
 			array(
-				'redirect_url'            => get_permalink( $post_id ),
-				'product-pages-info-text' => '[youpay-popup]',
+				'redirect_url'                       => get_permalink( $post_id ),
+				'product-pages-info-text'            => '[youpay-popup]',
+				'enabled'                            => true,
+				'title'                              => __( 'YouPay', 'woo_youpay' ),
+				'presentational-customisation-title' => '',
+				'show-info-on-product-pages'         => true,
+				'product-pages-hook'                 => 'woocommerce_single_product_summary',
+				'product-pages-priority'             => 15,
+				'show-info-on-cart-page'             => true,
+				'cart-page-info-text'                => '[youpay-popup]',
 			)
 		);
 	}
