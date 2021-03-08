@@ -3,7 +3,7 @@
  * Plugin Name:       YouPay for WooCommerce
  * Plugin URI:        http://youpay.link/
  * Description:       Share a YouPay link with someone & let them pay for your order.
- * Version:           1.0.5
+ * Version:           1.1
  * Author:            MyWork
  * Author URI:        http://mywork.com.au/
  *
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( ! defined( 'YOUPAY_VERSION' ) ) {
-	define( 'YOUPAY_VERSION', '1.0.5' );
+	define( 'YOUPAY_VERSION', '1.1' );
 }
 
 if ( ! defined( 'YOUPAY_BASENAME' ) ) {
