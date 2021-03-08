@@ -96,27 +96,18 @@ class ProcessPayment {
 		$order_id     = $youpay_order->store_order_id;
 		$order        = \wc_get_order( $order_id );
 
-		echo 'status: ' . $youpay_order->status_id . ' -- ' . $youpay_order->updated_at;
-
-		echo 'hoo';
 		// This shouldn't ever pass as true.
 		if ( $youpay_order->status_id ) {
-			echo 'x';
 			if ( $order->get_status() === 'on-hold' ) {
-				echo 'y';
 				return;
 			}
-			echo 'z';
 			$order->update_status( 'on-hold', __( 'Awaiting YouPay Payment.', 'youpay' ) );
 			return;
 		}
 
-		echo '1';
 		if ( $order->get_status() === 'cancelled' ) {
-			echo '2';
 			return;
 		}
-		echo '3';
 
 		$order->update_status( 'cancelled', 'YouPay Order Cancelled' );
 	}
