@@ -1,0 +1,15 @@
+== Changelog ==
+= 1.1 =
+
+### Enhancements
+
+- Cancelling an order in YouPay will now cancel the order in your store and vise versa.
+
+### BugFixes
+
+- Add no-index to payment success page
+- Typos in docs and update plugin company
+
+= 1.0.5 =
+
+Initial public version release.
