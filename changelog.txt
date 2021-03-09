@@ -1,4 +1,10 @@
 == Changelog ==
+= 1.1.1 =
+
+### BugFixes
+
+- Fix Checkout.js URL by updating YouPay PHP SDK
+
 = 1.1 =
 
 ### Enhancements

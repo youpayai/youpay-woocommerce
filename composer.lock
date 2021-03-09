@@ -213,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyWorkAus/youpay-php-sdk.git",
-                "reference": "fa8847df0cdecd312d3176f4350de78581dd9723"
+                "reference": "bca9d28f80c9d0223a4c48b3e95e319a1b384999"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/fa8847df0cdecd312d3176f4350de78581dd9723",
-                "reference": "fa8847df0cdecd312d3176f4350de78581dd9723",
+                "url": "https://api.github.com/repos/MyWorkAus/youpay-php-sdk/zipball/bca9d28f80c9d0223a4c48b3e95e319a1b384999",
+                "reference": "bca9d28f80c9d0223a4c48b3e95e319a1b384999",
                 "shasum": ""
             },
             "require": {
@@ -245,7 +245,7 @@
                 "source": "https://github.com/MyWorkAus/youpay-php-sdk/tree/master",
                 "issues": "https://github.com/MyWorkAus/youpay-php-sdk/issues"
             },
-            "time": "2021-03-09T01:43:18+00:00"
+            "time": "2021-03-09T06:33:53+00:00"
         },
         {
             "name": "psr/http-message",
