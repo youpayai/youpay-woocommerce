@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.6",
-        "myworkaus/youpay-php-sdk": "dev-master"
+        "youpayai/youpay-php-sdk": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^v3.4",
