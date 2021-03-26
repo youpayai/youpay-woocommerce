@@ -1,4 +1,10 @@
 == Changelog ==
+= 1.1.2 =
+
+### Enhancements
+
+- Add register now link to YouPay login screen
+
 = 1.1.1 =
 
 ### BugFixes
