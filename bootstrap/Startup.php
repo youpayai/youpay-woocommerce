@@ -258,13 +258,13 @@ class Startup {
 			array(
 				'redirect_url'                       => get_permalink( $post_id ),
 				'product-pages-info-text'            => '[youpay-popup]',
-				'enabled'                            => true,
+				'enabled'                            => 'yes',
 				'title'                              => __( 'YouPay', 'woo_youpay' ),
 				'presentational-customisation-title' => '',
-				'show-info-on-product-pages'         => true,
+				'show-info-on-product-pages'         => 'yes',
 				'product-pages-hook'                 => 'woocommerce_single_product_summary',
 				'product-pages-priority'             => 15,
-				'show-info-on-cart-page'             => true,
+				'show-info-on-cart-page'             => 'yes',
 				'cart-page-info-text'                => '[youpay-popup]',
 			)
 		);

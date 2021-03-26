@@ -1,6 +1,12 @@
 == Changelog ==
 = 1.1.2 =
 
+### BugFixes
+
+- Fix default checkboxes
+
+= 1.1.2 =
+
 ### Enhancements
 
 - Add register now link to YouPay login screen
