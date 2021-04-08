@@ -78,7 +78,7 @@ class YouPayController {
 	 * Add Checkout Page Script
 	 */
 	public function enqueue_scripts() {
-		$url = $this->youpay->api->api_url . 'popup.js';
+		$url = $this->youpay->api->app_url . 'popup.js';
 
 		wp_enqueue_script( $this->youpay->plugin_slug . '-popup', $url, array(), $this->youpay->version, true );
 	}
@@ -196,7 +196,7 @@ class YouPayController {
 		global $post;
 
 		$youpay_order_id = get_post_meta( $post->ID, 'youpay_order_id', true );
-		$order_link      = $this->youpay->api->api_url . 'resources/orders/' . $youpay_order_id;
+		$order_link      = $this->youpay->api->app_url . 'resources/orders/' . $youpay_order_id;
 
 		// TODO: Show more order information in this box
 		// $order_details = $this->youpay->api->getOrder($youpay_order_id);

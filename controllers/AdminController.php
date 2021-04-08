@@ -102,7 +102,7 @@ class AdminController {
 			// left blank.
 		}
 		if ( empty( $store->payment_gateways ) ) {
-//			$url = $this->youpay->api->api_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways&redirect_after=" . urlencode( $next_url );
+//			$url = $this->youpay->api->app_url . "resources/payment-gateways/new?viaResource=stores&viaResourceId={$keys->store_id}&viaRelationship=payment_gateways&redirect_after=" . urlencode( $next_url );
 //			wp_redirect( $url );
 //			exit;
 		} else {
