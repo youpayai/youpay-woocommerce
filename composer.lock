@@ -545,16 +545,16 @@
         },
         {
             "name": "youpayai/youpay-php-sdk",
-            "version": "1.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/youpayai/youpay-php-sdk.git",
-                "reference": "8a9f64aa13d39b0442068b9d72b44183f184a9f3"
+                "reference": "894a72bb4155c7012523d5101f1c596d41275ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/youpayai/youpay-php-sdk/zipball/8a9f64aa13d39b0442068b9d72b44183f184a9f3",
-                "reference": "8a9f64aa13d39b0442068b9d72b44183f184a9f3",
+                "url": "https://api.github.com/repos/youpayai/youpay-php-sdk/zipball/894a72bb4155c7012523d5101f1c596d41275ca2",
+                "reference": "894a72bb4155c7012523d5101f1c596d41275ca2",
                 "shasum": ""
             },
             "require": {
@@ -577,10 +577,10 @@
             ],
             "description": "YouPay PHP SDK",
             "support": {
-                "source": "https://github.com/youpayai/youpay-php-sdk/tree/1.0",
+                "source": "https://github.com/youpayai/youpay-php-sdk/tree/1.0.1",
                 "issues": "https://github.com/youpayai/youpay-php-sdk/issues"
             },
-            "time": "2021-03-23T23:10:14+00:00"
+            "time": "2021-04-08T08:02:02+00:00"
         }
     ],
     "packages-dev": [
