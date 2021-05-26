@@ -1,4 +1,10 @@
 == Changelog ==
+= 1.1.5 =
+
+### BugFixes
+
+- External logo url
+
 = 1.1.4 =
 
 ### BugFixes
