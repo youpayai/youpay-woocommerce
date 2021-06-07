@@ -173,8 +173,8 @@ class YouPayController {
 	 * @param $screen
 	 * @param \WP_Post $post The Post Object.
 	 */
-	function mv_add_meta_boxes( $screen, \WP_Post $post ) {
-		if ( $post->post_type === 'shop_order' ) {
+	function mv_add_meta_boxes( $screen, $post ) {
+		if ( $post instanceof \WP_Post && $post->post_type === 'shop_order' ) {
 			$youpay_order_id = get_post_meta( $post->ID, 'youpay_order_id', true );
 			if ( ! empty( $youpay_order_id ) ) {
 				add_meta_box(

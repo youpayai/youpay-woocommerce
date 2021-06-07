@@ -1,4 +1,8 @@
 == Changelog ==
+= 1.1.6 =
+
+### Compatibility fix for webappick-product-feed-for-woocommerce
+
 = 1.1.5 =
 
 ### BugFixes
