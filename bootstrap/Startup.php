@@ -2,6 +2,7 @@
 
 namespace WooYouPay\bootstrap;
 
+use GuzzleHttp\Exception\GuzzleException;
 use WooYouPay\controllers\AdminController;
 use WooYouPay\controllers\ProcessPayment;
 use WooYouPay\controllers\YouPayController;
@@ -285,5 +286,19 @@ class Startup {
 	public function update_settings( array $settings ) {
 		$this->settings = array_merge( $this->settings, $settings );
 		update_option( $this->plugin_slug . '_settings', $this->settings );
+	}
+
+	/**
+	 * Ping the current API to ensure its working
+	 *
+	 * @return bool
+	 */
+	public function ping()
+	{
+		try {
+			return $this->api->client()->get( '/v1/ping' )->getStatusCode() === 200;
+		} catch ( GuzzleException $exception ){
+			return false;
+		}
 	}
 }

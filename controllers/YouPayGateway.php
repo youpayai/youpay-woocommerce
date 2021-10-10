@@ -71,6 +71,10 @@ class YouPayGateway extends \WC_Payment_Gateway {
 			return false;
 		}
 
+		if ( ! $this->youpay->ping() ) {
+			return false;
+		}
+
 		if ( ! empty( $this->youpay->settings['has_payment_gateways'] ) ) {
 			return true;
 		}
@@ -311,6 +315,6 @@ class YouPayGateway extends \WC_Payment_Gateway {
 		if ( $sent_to_admin || $this->id !== $order->get_payment_method() ) {
 			return;
 		}
-//		echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
+		// echo wp_kses_post( wpautop( wptexturize( $this->instructions ) ) . PHP_EOL );
 	}
 }
