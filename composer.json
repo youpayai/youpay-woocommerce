@@ -7,17 +7,21 @@
         {
             "name": "Clara Leigh",
             "email": "clara@mywork.com.au"
+        },
+        {
+            "name": "Björn Mett",
+            "email": "bjorn@mywork.com.au"
         }
     ],
     "repositories": [
         {
             "type": "vcs",
-            "url":  "git@github.com:MyWorkAus/youpay-php-sdk.git"
+            "url":  "git@github.com:youpayai/youpay-php-sdk.git"
         }
     ],
     "require": {
         "php": ">=5.6",
-        "youpayai/youpay-php-sdk": "^1.0"
+        "youpayai/youpay-php-sdk": "^2.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^v3.4",
@@ -25,11 +29,12 @@
     },
     "autoload": {
         "classmap": [
-          "controllers",
-            "bootstrap"
+            "admin",
+            "includes",
+            "public"
         ],
         "psr-4": {
-            "WooYouPay\\": "./"
+            "YouPay_WooCommerce\\": "./"
         }
     },
     "config": {
