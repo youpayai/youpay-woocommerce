@@ -175,7 +175,7 @@ class YouPay_WooCommerce_Public {
 			throw $exception;
 		}
 
-		var_dump($response);
+		// var_dump($response);
 
 		// try {
 		// 	$keys = Client::auth( 'bjorn@mywork.com.au', 'q6shEcRcsJ7gJxi', 'youpaywoocomm.wpengine.com', 'woocommerce' );
@@ -190,7 +190,7 @@ class YouPay_WooCommerce_Public {
 
 		// var_dump($youpay_client);
 
-		echo '<div id="youpay-share-box"><img src="'.plugin_dir_url( __FILE__ ) . 'images/youpay-share-button.png"></div>'; // Change to desired image url
+		echo '<div id="youpay-share-box"><a href="'.$response->redirect.'" target="_blank"><img src="'.plugin_dir_url( __FILE__ ) . 'images/youpay-share-button.png"></a></div>'; // Change to desired image url
 
 	}
 	

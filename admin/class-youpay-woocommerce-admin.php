@@ -152,7 +152,7 @@ class YouPay_WooCommerce_Admin {
 
 		add_settings_field( 
 			'youpay_password',
-			'YouPay password',
+			'YouPay Password',
 			array($this,'youpay_password_input'),
 			'youpay',
 			'youpay_section_developers',
