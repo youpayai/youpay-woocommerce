@@ -30,7 +30,21 @@ class YouPay_WooCommerce_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		//create db table for YP orders
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		$table_name = $wpdb->prefix . 'youpay_orders';
+	
+		$sql = "CREATE TABLE $table_name (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+			youpay_order_id varchar(128) NOT NULL,
+			products longtext NOT NULL,
+			UNIQUE KEY id (id)
+		) $charset_collate;";
+	
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
 	}
 
 }

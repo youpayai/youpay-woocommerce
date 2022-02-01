@@ -179,8 +179,12 @@ class YouPay_WooCommerce {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		//set YouPay endpoints
+		$this->loader->add_action( 'rest_api_init',  $plugin_public, 'set_youpay_endpoints' );
+
 		//add youpay banners
 		$this->loader->add_filter( 'woocommerce_after_add_to_cart_form', $plugin_public, 'youpay_product_page_banner');
+		$this->loader->add_filter( 'woocommerce_after_cart', $plugin_public, 'youpay_cart_page_banner');
 
 	}
 
