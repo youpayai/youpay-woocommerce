@@ -157,19 +157,70 @@ class YouPay_WooCommerce_Public {
 
 		$youpay_order_id = $req->get_param('youpay_order_id');
 
-		wc()->frontend_includes();
-		WC()->session = new WC_Session_Handler();
-		WC()->session->init();
-		WC()->customer = new WC_Customer( get_current_user_id(), true );
-		WC()->cart = new WC_Cart();
 
 		$youpay_order = $this->getYouPayOrder($youpay_order_id);
 		if($youpay_order){
-			$youpay_order_products = unserialize($youpay_order->products);
-			// add youpay order products to cart
-			foreach ($youpay_order_products as $product_data) {
-				WC()->cart->add_to_cart($product_data->product_id,$product_data->quantity);
+
+			wc()->frontend_includes();
+			WC()->session = new WC_Session_Handler();
+			WC()->session->init();
+			WC()->customer = new WC_Customer( get_current_user_id(), true );
+			WC()->cart = new WC_Cart();
+
+    		//TODO: Check if order with this youpay order id already exists
+
+			$orders = wc_get_orders(array(
+				'customer_id' => get_current_user_id(),
+				'return' => 'ids',
+			));
+						
+			$order_found = false;
+			foreach ($orders as $order_id) {
+			  $youpay_shopper_order_id = get_post_meta($order_id, 'youpay_shopper_order_id', true);  
+
+			  if($youpay_shopper_order_id == $youpay_order_id){
+				  //existing order found
+				  $order_found = $order_id;
+			  }
 			}
+
+			if($order_found){
+				//existing order found
+				WC()->order = wc_get_order($order_found);
+			}else{
+				//create new order
+				WC()->order = new WC_Order();
+				$youpay_order_products = unserialize($youpay_order->products);
+				$shopper_data = unserialize($youpay_order->shopper_data);
+				// add youpay order products to cart & to shopper order
+				foreach ($youpay_order_products as $product_data) {
+					WC()->cart->add_to_cart($product_data->product_id,$product_data->quantity);
+					$product = new WC_Product($product_data->product_id);
+					WC()->order->add_product($product,$product_data->quantity);
+				}
+			}
+
+			$shopper_data = unserialize($youpay_order->shopper_data);
+
+			//set shopper address for order
+			$address = array(
+				'first_name'	=> wc_clean($shopper_data['first_name']),
+				'last_name'		=> wc_clean($shopper_data['last_name']),
+				'email'			=> wc_clean($shopper_data['email']),
+				'phone'			=> wc_clean($shopper_data['phone']),
+				'address_1'		=> wc_clean($shopper_data['address_1']),
+				'address_2'		=> wc_clean($shopper_data['address_2']),
+				'city'			=> wc_clean($shopper_data['city']),
+				'state'			=> wc_clean($shopper_data['state']),
+				'postcode'		=> wc_clean($shopper_data['postcode']),
+				'country'		=> wc_clean($shopper_data['country']),
+			);
+			WC()->order->set_address($address);
+			//save youpay order ID as meta data
+			WC()->order->add_meta_data('youpay_shopper_order_id', $youpay_order_id);
+			WC()->order->calculate_totals();
+			WC()->order->save();
+
 		}
 
 		nocache_headers();
@@ -195,24 +246,33 @@ class YouPay_WooCommerce_Public {
 		$request_data = $req->get_json_params();
 		$youpay_order_id = $request_data['data']['youpay_order_id'];
 		//set shopper data (for address)
-		$shopper = $request_data['data']['shopper'];
-		
-		$youpay_order = $this->getYouPayOrder($youpay_order_id);
-		if($youpay_order){
-
-			$json = array();
-			$json['data'] = array(
-				'redirect'	=> get_home_url()."/wp-json/youpay/order?youpay_order_id=".$youpay_order_id,
-			);
-			$json['meta'] = array(
-				'success'	=> true
-			);
+		$shopper_data = $request_data['data']['shopper'];
+		//save shopper data
+		if($shopper_data){
+			$this->saveYouPayShopperData($youpay_order_id,$shopper_data);
+			$youpay_order = $this->getYouPayOrder($youpay_order_id);
+			if($youpay_order){
+	
+				$json = array();
+				$json['data'] = array(
+					'redirect'	=> get_home_url()."/wp-json/youpay/order?youpay_order_id=".$youpay_order_id,
+				);
+				$json['meta'] = array(
+					'success'	=> true
+				);
+			}else{
+				//order not found
+				$json['data'] = array(
+					'error'	=> 'No YouPay order found'
+				);
+			}
 		}else{
-			//order not found
+			//no shopper data not found
 			$json['data'] = array(
-				'error'	=> 'No YouPay order found'
+				'error'	=> 'No Shopper data provided'
 			);
 		}
+		
 		return new WP_REST_Response( $json, 200 );
 	}
 
@@ -507,7 +567,7 @@ class YouPay_WooCommerce_Public {
 		$current_product = wc_get_product($post);
 		$current_product_id = $current_product->get_id();
 
-		echo '<div id="youpay-share-box"><a href="/wp-json/youpay/create-order-single/?product_id='.(int)$current_product_id.'" target="_blank"><img src="'.plugin_dir_url( __FILE__ ) . 'images/youpay-share-button.png"></a></div>'; // Change to desired image 
+		echo '<div id="youpay-share-box"><a href="/wp-json/youpay/create-order-single/?product_id='.(int)$current_product_id.'&qty=1" target="_blank"><img src="'.plugin_dir_url( __FILE__ ) . 'images/youpay-share-button.png"></a></div>'; // Change to desired image 
 
 	}
 	
@@ -628,6 +688,20 @@ class YouPay_WooCommerce_Public {
 			'products'			=> serialize($order_items),
 		);
 		$wpdb->insert($table_name,$data);
+	}
+
+	//save shopper data in youpay orders table
+	function saveYouPayShopperData($youpay_order_id, $shopper_data){
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'youpay_orders';
+		$data = array(
+			'youpay_order_id'	=> $youpay_order_id,
+			'shopper_data'		=> serialize($shopper_data),
+		);
+		$where = array(
+			'youpay_order_id'	=> $youpay_order_id,
+		);
+		$wpdb->update($table_name,$data,$where);
 	}
 
 	//save product data in youpay orders table

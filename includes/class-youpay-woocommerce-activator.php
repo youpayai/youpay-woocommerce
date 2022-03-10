@@ -40,6 +40,7 @@ class YouPay_WooCommerce_Activator {
 			time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			youpay_order_id varchar(128) NOT NULL,
 			products longtext NOT NULL,
+			shopper_data longtext NOT NULL,
 			UNIQUE KEY id (id)
 		) $charset_collate;";
 	
