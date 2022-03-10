@@ -192,7 +192,7 @@ class YouPay_WooCommerce_Admin {
 	 */
 	public function youpay_section_developers_callback( $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Follow the white rabbit.', 'youpay' ); ?></p>
+		<!-- <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Follow the white rabbit.', 'youpay' ); ?></p> -->
 		<?php
 	}
 	
